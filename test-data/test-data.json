@@ -1,0 +1,14 @@
+{
+  "environment": {
+    "baseUrl": "https://clinicos-uat.up.railway.app",
+    "paths": {
+      "login": "/login"
+    }
+  },
+  "credentials": {
+    "owner": {
+      "email": "owner@demo.com",
+      "password": "demo123"
+    }
+  }
+}

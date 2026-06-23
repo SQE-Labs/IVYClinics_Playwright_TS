@@ -1,0 +1,38 @@
+{
+  "name": "ivyclinics_playwright_ts",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript test automation framework for IVY Clinics",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:login": "playwright test tests/login.spec.ts",
+    "test:chromium": "playwright test --project=chromium",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SQE-Labs/IVYClinics_Playwright_TS.git"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "e2e",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SQE-Labs/IVYClinics_Playwright_TS/issues"
+  },
+  "homepage": "https://github.com/SQE-Labs/IVYClinics_Playwright_TS#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^26.0.0",
+    "typescript": "^5.8.3"
+  }
+}
