@@ -13,7 +13,7 @@ export default defineConfig({
     timeout: 10_000,
   },
   use: {
-    headless: false,
+    headless: !!process.env.CI,
     baseURL: process.env.BASE_URL ?? testData.environment.baseUrl,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
