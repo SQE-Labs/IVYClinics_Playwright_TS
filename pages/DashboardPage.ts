@@ -6,7 +6,9 @@ export class DashboardPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.greetingHeading = page.getByRole('heading', { name: 'Good evening, Demo' });
+    this.greetingHeading = page.getByRole('heading', {
+      name: /^Good (morning|afternoon|evening), Demo$/,
+    });
   }
 
   async verifyGreetingVisible(): Promise<void> {
