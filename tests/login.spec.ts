@@ -1,25 +1,31 @@
-import { test } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { DashboardPage } from '../pages/DashboardPage';
-import testData from '../test-data/test-data.json';
+import { test } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
+import { DashboardPage } from "../pages/DashboardPage";
+import { ConfigManager } from "../utils/ConfigManager";
 
-test.describe('Login', () => {
-  test('should login successfully and display dashboard greeting', async ({ page }) => {
+test.describe("Login", () => {
+  test("should login successfully and display dashboard greeting", async ({
+    page,
+  }) => {
     const loginPage = new LoginPage(page);
+
     const dashboardPage = new DashboardPage(page);
 
-    await test.step('Navigate to login page', async () => {
+    const credentials = ConfigManager.getCredentials();
+
+    await test.step("Navigate to login page", async () => {
       await loginPage.goto();
     });
 
-    await test.step('Enter credentials and sign in', async () => {
-      await loginPage.enterEmail(testData.credentials.owner.email);
-      await loginPage.enterPassword(testData.credentials.owner.password);
-      await loginPage.clickSignIn();
+    await test.step("Login", async () => {
+      console.log(`ENV: ${process.env.ENV}`);
+      console.log(`USER_TYPE: ${process.env.USER_TYPE}`);
+      await loginPage.login(credentials.email, credentials.password);
     });
 
-    await test.step('Verify dashboard loads successfully', async () => {
+    await test.step("Verify dashboard", async () => {
       await dashboardPage.waitForDashboard();
+
       await dashboardPage.verifyGreetingVisible();
     });
   });

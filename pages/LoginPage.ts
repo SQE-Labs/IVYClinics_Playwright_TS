@@ -1,6 +1,6 @@
-import { Locator, Page } from '@playwright/test';
-import { BasePage } from '../base/BasePage';
-import testData from '../test-data/test-data.json';
+import { Locator, Page } from "@playwright/test";
+import { BasePage } from "../base/BasePage";
+import { ConfigManager } from "../utils/ConfigManager";
 
 export class LoginPage extends BasePage {
   private readonly emailInput: Locator;
@@ -9,30 +9,23 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.emailInput = page.getByRole('textbox', { name: 'Email*' });
-    this.passwordInput = page.getByRole('textbox', { name: 'Password*' });
-    this.signInButton = page.getByRole('button', { name: 'Sign in' });
+
+    this.emailInput = page.getByRole("textbox", { name: "Email*" });
+
+    this.passwordInput = page.getByRole("textbox", { name: "Password*" });
+
+    this.signInButton = page.getByRole("button", { name: "Sign in" });
   }
 
   async goto(): Promise<void> {
-    await this.navigateTo(testData.environment.paths.login);
-  }
+    const env = ConfigManager.getEnvironment();
 
-  async enterEmail(email: string): Promise<void> {
-    await this.fill(this.emailInput, email);
-  }
-
-  async enterPassword(password: string): Promise<void> {
-    await this.fill(this.passwordInput, password);
-  }
-
-  async clickSignIn(): Promise<void> {
-    await this.click(this.signInButton);
+    await this.navigateTo(env.paths.login);
   }
 
   async login(email: string, password: string): Promise<void> {
-    await this.enterEmail(email);
-    await this.enterPassword(password);
-    await this.clickSignIn();
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.signInButton.click();
   }
 }

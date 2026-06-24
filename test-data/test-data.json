@@ -1,14 +1,33 @@
 {
-  "environment": {
-    "baseUrl": "https://clinicos-uat.up.railway.app",
-    "paths": {
-      "login": "/login"
+  "environments": {
+    "uat": {
+      "baseUrl": "https://clinicos-uat.up.railway.app",
+      "paths": {
+        "login": "/login"
+      }
+    },
+    "qa": {
+      "baseUrl": "https://clinicos-qa.up.railway.app",
+      "paths": {
+        "login": "/login"
+      }
     }
   },
+
   "credentials": {
     "owner": {
-      "email": "owner@demo.com",
-      "password": "demo123"
+      "email": "b3duZXJAZGVtby5jb20=",
+      "password": "ZGVtbzEyMw=="
+    },
+
+    "manager": {
+      "email": "bWFuYWdlckBkZW1vLmNvbQ==",
+      "password": "bWFuYWdlcjEyMw=="
+    },
+
+    "customer": {
+      "email": "Y3VzdG9tZXJAZGVtby5jb20=",
+      "password": "Y3VzdG9tZXIxMjM="
     }
   }
 }
