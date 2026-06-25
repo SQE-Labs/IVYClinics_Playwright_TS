@@ -17,15 +17,20 @@ export class LoginPage extends BasePage {
     this.signInButton = page.getByRole("button", { name: "Sign in" });
   }
 
-  async goto(): Promise<void> {
+  async goto() {
     const env = ConfigManager.getEnvironment();
 
     await this.navigateTo(env.paths.login);
   }
 
-  async login(email: string, password: string): Promise<void> {
+  async login(email: string, password: string) {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    await this.signInButton.click();
+    await Promise.all([
+      this.page.waitForURL((url) => !url.pathname.includes("/login"), {
+        timeout: 30000,
+      }),
+      this.signInButton.click(),
+    ]);
   }
 }

@@ -11,15 +11,15 @@ export class BasePage {
     this.page = page;
   }
 
-  async navigateTo(path: string): Promise<void> {
+  async navigateTo(path: string) {
     await this.page.goto(path);
   }
 
-  async click(locator: Locator): Promise<void> {
+  async click(locator: Locator) {
     await locator.click();
   }
 
-  async fill(locator: Locator, value: string): Promise<void> {
+  async fill(locator: Locator, value: string) {
     await locator.fill(value);
   }
 
@@ -27,7 +27,7 @@ export class BasePage {
     return (await locator.textContent())?.trim() ?? '';
   }
 
-  async waitForElement(locator: Locator): Promise<void> {
+  async waitForElement(locator: Locator) {
     await locator.waitFor({ state: 'visible' });
   }
 
@@ -35,7 +35,7 @@ export class BasePage {
     return locator.isVisible();
   }
 
-  async expectToBeVisible(locator: Locator): Promise<void> {
+  async expectToBeVisible(locator: Locator) {
     await expect(locator).toBeVisible();
   }
 }

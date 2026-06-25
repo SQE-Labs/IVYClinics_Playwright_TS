@@ -11,11 +11,11 @@ export class DashboardPage extends BasePage {
     });
   }
 
-  async verifyGreetingVisible(): Promise<void> {
+  async verifyGreetingVisible() {
     await this.expectToBeVisible(this.greetingHeading);
   }
 
-  async waitForDashboard(): Promise<void> {
+  async waitForDashboard() {
     await this.waitForElement(this.greetingHeading);
   }
 }
