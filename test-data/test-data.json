@@ -13,21 +13,28 @@
       }
     }
   },
-
   "credentials": {
     "owner": {
       "email": "b3duZXJAZGVtby5jb20=",
       "password": "ZGVtbzEyMw=="
     },
-
     "manager": {
       "email": "bWFuYWdlckBkZW1vLmNvbQ==",
       "password": "bWFuYWdlcjEyMw=="
     },
-
     "customer": {
       "email": "Y3VzdG9tZXJAZGVtby5jb20=",
       "password": "Y3VzdG9tZXIxMjM="
     }
+  },
+  
+ 
+  "dashboard": {
+    "clinics": [
+      "HLP Galleria, Mohali",
+      "Sector 8C, Chandigarh",
+      "ivy HP"
+    ]
   }
+
 }
