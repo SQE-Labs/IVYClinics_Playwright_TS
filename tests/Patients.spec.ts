@@ -34,7 +34,7 @@ test.describe("Patients Page", () => {
 
             await patientsPage.enterEmailfield(testData.newPatientForm.email)
 
-            await patientsPage.enterDatefield(testData.newPatientForm.date)
+           await patientsPage.enterDatefield(testData.newPatientForm.date)
             const phoneNumber = utils.generateRandomPhoneNumber();
             await patientsPage.enterPhoneNumberField(phoneNumber)
 
