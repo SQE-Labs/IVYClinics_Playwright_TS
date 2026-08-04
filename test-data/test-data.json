@@ -27,14 +27,36 @@
       "password": "Y3VzdG9tZXIxMjM="
     }
   },
-  
- 
   "dashboard": {
     "clinics": [
       "HLP Galleria, Mohali",
       "Sector 8C, Chandigarh",
       "ivy HP"
     ]
-  }
+  },
+  "newPatientForm": {
+    "email": "Test@gmail.com",
+    "date": "07242026",
+    "gender":"Male",
+    "LastName": "Test",
+    "occupation":"test",
+    "category":"Hair (H)",
+    "contactType":"Home",
+    "bestTimeToReach": "Morning (9am-12pm)",
+    "Address": "test1,POtest,po,TEst",
+    "reason" : "iam sick",
+    "howDidYouHearAboutUs":"Instagram",
+    "companyName":"Test IVY",
+    "employeeID":"123ID",
+    "priceGroup":"Consultation (DENTAL)",
+    "bloodGroup":"A+",
+    "knownAllergies":"TestAllergies",
+    "contactName":"testName",
+    "relationship":"Spouse",
+    "phoneBleongsto":"Self (the patient)"
+      
+
+
+    }
 
 }
