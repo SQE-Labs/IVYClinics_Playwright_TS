@@ -31,6 +31,18 @@ export class PatientsPage extends BasePage {
     readonly patientConsentCheckbox: Locator;
     readonly savePatientButton: Locator;
     readonly patientName: Function;
+    readonly phoneNumberValidationMessage: Locator;
+    readonly backButton: Locator;
+    readonly addPatientButton: Locator;
+    readonly saveFamilySharingButton: Locator;
+    readonly belongsToValidationMessage: Locator;
+    readonly phoneBlegongsToDropDown: Locator;
+    readonly sharedWithLink: Locator;
+    readonly saveBookAppointmentButton: Locator;
+    readonly verifyBookAppointmentHeading: Locator;
+    readonly emailFieldLabel : Locator;
+    readonly bloodGroupFieldLabel: Locator;
+    readonly allergiesFieldLabel: Locator;
 
 
 
@@ -65,6 +77,19 @@ export class PatientsPage extends BasePage {
         this.patientConsentCheckbox = page.getByLabel('Patient has read and agreed to the consent form')
         this.savePatientButton = page.getByRole('button', { name: 'Save Patient' })
         this.patientName = (name: string) => page.getByRole('heading', { name });
+        this.phoneNumberValidationMessage = page.locator('#phone-number-error');
+        this.backButton = page.getByRole('button', { name: 'Back' })
+        this.addPatientButton = page.getByText('Yes, Add Patient', { exact: true })
+        this.saveFamilySharingButton = page.locator('span').filter({ hasText: 'Save Patient' }).last()
+        this.belongsToValidationMessage = page.getByText('Please choose whose phone this is')
+        this.phoneBlegongsToDropDown = page.locator("//div[@class='_holderForm_c0ftr_114']//select[@id='phone-belongs-to']")
+        this.sharedWithLink = page.getByRole('link', { name: 'Shared with 1 other patient' })
+        this.saveBookAppointmentButton = page.getByRole('button', { name: 'Save & Book Appointment' })
+        this.verifyBookAppointmentHeading = page.getByRole('heading', { name: 'Book Appointment' })
+        this.emailFieldLabel = page.locator('//span[text()="Email"]/following::span[1]')
+        this.bloodGroupFieldLabel = page.locator('//span[text()="Blood Group"]/following::span[2]')
+        this.allergiesFieldLabel = page.locator('//span[text()="Allergies"]/following::span[1]')
+
 
 
     }
@@ -152,8 +177,23 @@ export class PatientsPage extends BasePage {
     async clickSavePatientButton() {
         await this.click(this.savePatientButton)
     }
-   async getPatientName(name: string) {
-    return this.patientName(name);
-}
+    async getPatientName(name: string) {
+        return this.patientName(name);
+    }
+    async clickBackButton() {
+        await this.click(this.backButton)
+    }
+    async clickAddpatientButton() {
+        await this.click(this.addPatientButton)
+    }
+    async clickSaveFamilySharingButton() {
+        await this.click(this.saveFamilySharingButton)
+    }
+    async selectphoneBlegongsToDropDown(phoneBelongsto:string) {
+        await this.phoneBlegongsToDropDown.selectOption(phoneBelongsto)
 
+    }
+    async clicksaveBookAppointmentButton(){
+        await this.click(this.saveBookAppointmentButton)
+    }
 }

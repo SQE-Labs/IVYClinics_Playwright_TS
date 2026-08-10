@@ -51,7 +51,11 @@
     "knownAllergies":"TestAllergies",
     "contactName":"testName",
     "relationship":"Spouse",
-    "phoneBleongsto":"Self (the patient)"
+    "phoneBleongsto":"Self (the patient)",
+    "phoneNumbertest1":"12345",
+    "phoneNumbertest2":"1234567890",
+    "phoneBleongsToFieldpopup":"Self (the patient)"
+
       
 
 
