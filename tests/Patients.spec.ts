@@ -17,7 +17,7 @@ test.describe("Patients Page", () => {
         const credentials = ConfigManager.getCredentials();
         await loginPage.login(credentials.email, credentials.password);
     })
-    
+
     test("IVY_PAT_1,IVY_PAT_11,IVY_PAT_12,Verify that the user is able to fill all fields and than Patient Profile opens successfully", async ({ page }) => {
         const patientsPage = new PatientsPage(page)
 
@@ -99,7 +99,7 @@ test.describe("Patients Page", () => {
         })
     })
 
-    test("Verify the Family Sharing flow with an existing phone number and view", async ({ page }) => {
+    test("Verify the Family Sharing flow with an existing phone number and view and view and book appoint redirected to corresponding page", async ({ page }) => {
 
         const patientsPage = new PatientsPage(page)
 
@@ -129,11 +129,6 @@ test.describe("Patients Page", () => {
             await patientsPage.clickSaveFamilySharingButton();
             await expect(patientsPage.sharedWithLink).toBeVisible()
         })
-
-    })
-    test("Verify view and book appointment button redirect to corresponding page", async ({ page }) => {
-        const patientsPage = new PatientsPage(page)
-
         await test.step("Navigate to patient profile page ", async () => {
             await patientsPage.clickPatientsTab();
             await patientsPage.enterSearchField(patientName);
@@ -143,10 +138,11 @@ test.describe("Patients Page", () => {
         await test.step("Navigate to book appointment page ", async () => {
             await patientsPage.enterSearchField(patientName);
             await patientsPage.clickbookButtonPatientprofile();
-            console.log("patientName =", patientName);
             await patientsPage.expectToBeVisible(patientsPage.patientCardName(patientName))
         })
+
     })
+
     test("Verify medical history get saved", async ({ page }) => {
         const patientsPage = new PatientsPage(page)
 
