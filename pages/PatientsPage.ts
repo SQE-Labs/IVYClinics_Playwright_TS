@@ -30,7 +30,7 @@ export class PatientsPage extends BasePage {
     readonly phoneBelongsField: Locator;
     readonly patientConsentCheckbox: Locator;
     readonly savePatientButton: Locator;
-    readonly patientName: Function;
+    readonly patientNameprofile: Function;
     readonly phoneNumberValidationMessage: Locator;
     readonly backButton: Locator;
     readonly addPatientButton: Locator;
@@ -40,10 +40,24 @@ export class PatientsPage extends BasePage {
     readonly sharedWithLink: Locator;
     readonly saveBookAppointmentButton: Locator;
     readonly verifyBookAppointmentHeading: Locator;
-    readonly emailFieldLabel : Locator;
+    readonly emailFieldLabel: Locator;
     readonly bloodGroupFieldLabel: Locator;
     readonly allergiesFieldLabel: Locator;
-
+    readonly searchBoxField: Locator;
+    readonly viewButton: Locator;
+    readonly medicalHistoryTab: Locator;
+    readonly thyroidConditionDropdown: Locator;
+    readonly bloodPressureDropdown: Locator;
+    readonly lastCheckUpDropdown: Locator;
+    readonly saveMedicalHistoryButton: Locator;
+    readonly successMedicalHistoryMessage: Locator;
+    readonly diabetesCheckBox: Locator;
+    readonly usesTabaccoCheckBox: Locator;
+    readonly phoneFieldLabel: Function;
+    readonly firstNameValidationMessage: Locator;
+    readonly backButtonPatientProfile: Locator;
+    readonly bookButtonPatientprofile: Locator;
+    readonly patientCardName: Function;
 
 
     constructor(page: Page) {
@@ -76,7 +90,7 @@ export class PatientsPage extends BasePage {
         this.phoneBelongsField = page.getByLabel('Phone belongs to')
         this.patientConsentCheckbox = page.getByLabel('Patient has read and agreed to the consent form')
         this.savePatientButton = page.getByRole('button', { name: 'Save Patient' })
-        this.patientName = (name: string) => page.getByRole('heading', { name });
+        this.patientNameprofile = (name: string) => page.getByRole('heading', { name });
         this.phoneNumberValidationMessage = page.locator('#phone-number-error');
         this.backButton = page.getByRole('button', { name: 'Back' })
         this.addPatientButton = page.getByText('Yes, Add Patient', { exact: true })
@@ -89,6 +103,22 @@ export class PatientsPage extends BasePage {
         this.emailFieldLabel = page.locator('//span[text()="Email"]/following::span[1]')
         this.bloodGroupFieldLabel = page.locator('//span[text()="Blood Group"]/following::span[2]')
         this.allergiesFieldLabel = page.locator('//span[text()="Allergies"]/following::span[1]')
+        this.searchBoxField = page.getByRole('textbox', { name: 'Search by name, phone, or email...' })
+        this.viewButton = page.locator('button').filter({ hasText: 'View' }).first()
+        this.medicalHistoryTab = page.getByText('Medical History', { exact: true })
+        this.thyroidConditionDropdown = page.getByLabel('Thyroid Condition')
+        this.bloodPressureDropdown = page.getByLabel('Blood Pressure')
+        this.lastCheckUpDropdown = page.getByLabel('Last Checkup Date')
+        this.saveMedicalHistoryButton = page.getByRole('button', { name: 'Save Medical History' })
+        this.diabetesCheckBox = page.getByLabel('Diabetes')
+        this.successMedicalHistoryMessage = page.getByText('Save Medical History')
+        this.usesTabaccoCheckBox = page.getByLabel('Uses Tobacco')
+        this.phoneFieldLabel = (phone: string) => page.locator("//span[text()='Phone']/following::span[1]")
+        this.firstNameValidationMessage = page.locator('#first-name-error')
+        this.backButtonPatientProfile = page.getByRole('button', { name: 'Back' })
+        this.bookButtonPatientprofile = page.locator('button').filter({ hasText: 'Book' }).first()
+        this.patientCardName =  (name: string) => page.getByText(name);
+
 
 
 
@@ -178,7 +208,7 @@ export class PatientsPage extends BasePage {
         await this.click(this.savePatientButton)
     }
     async getPatientName(name: string) {
-        return this.patientName(name);
+        return this.patientNameprofile(name);
     }
     async clickBackButton() {
         await this.click(this.backButton)
@@ -189,11 +219,49 @@ export class PatientsPage extends BasePage {
     async clickSaveFamilySharingButton() {
         await this.click(this.saveFamilySharingButton)
     }
-    async selectphoneBlegongsToDropDown(phoneBelongsto:string) {
+    async selectphoneBlegongsToDropDown(phoneBelongsto: string) {
         await this.phoneBlegongsToDropDown.selectOption(phoneBelongsto)
 
     }
-    async clicksaveBookAppointmentButton(){
+    async clicksaveBookAppointmentButton() {
         await this.click(this.saveBookAppointmentButton)
     }
+    async enterSearchField(search: string) {
+        await this.fill(this.searchBoxField, search)
+    }
+    async clickViewButton() {
+        await this.click(this.viewButton)
+    }
+    async clickMedicalHistoryTab() {
+        await this.click(this.medicalHistoryTab)
+    }
+    async selectThyroidConditionDropdown(thyroidCondition: string) {
+        await this.thyroidConditionDropdown.selectOption(thyroidCondition)
+    }
+    async selectbloodPressureDropdown(bloodpressure: string) {
+        await this.bloodPressureDropdown.selectOption(bloodpressure)
+    }
+    async enterLastCheckUpDate(checkupdate: string) {
+        await this.lastCheckUpDropdown.pressSequentially(checkupdate)
+    }
+    async clickSaveMedicalHistoryButton() {
+        await this.click(this.saveMedicalHistoryButton)
+    }
+    async clickDiabetesCheckBox() {
+        await this.click(this.diabetesCheckBox)
+    }
+    async clickusesTabaccoCheckBox() {
+        await this.click(this.usesTabaccoCheckBox)
+    }
+    async getphoneFieldLabel(phone: string) {
+        return this.phoneFieldLabel(phone)
+    }
+    async clickbackButtonPatientProfile() {
+        await this.click(this.backButtonPatientProfile)
+    }
+    async clickbookButtonPatientprofile() {
+        await this.click(this.bookButtonPatientprofile)
+    }
+
+
 }
