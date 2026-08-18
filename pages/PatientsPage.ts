@@ -320,10 +320,7 @@ export class PatientsPage extends BasePage {
 
     }
 
-    // async clickTreatmentSuggestion() {
-    //     await this.reccommendedTreatments.hover();
-    //     await this.reccommendedTreatments.click();
-    // }
+   
     async clickSaveReccommendedTreatmentButton() {
         await this.click(this.saveReccommendedTreatmentButton)
     }
