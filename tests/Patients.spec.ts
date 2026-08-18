@@ -8,14 +8,17 @@ import testData from "../test-data/test-data.json";
 
 
 
+
 test.describe("Patients Page", () => {
+    const patientName = utils.generateRandomName();
     test.beforeEach(async ({ page }) => {
         const loginPage = new LoginPage(page)
         await loginPage.goto();
         const credentials = ConfigManager.getCredentials();
         await loginPage.login(credentials.email, credentials.password);
     })
-    test("IVY_PAT_1,IVY_PAT_11 IVY_PAT_11,IVY_PAT_12,Verify that the user is able to fill all fields and than Patient Profile opens successfully", async ({ page }) => {
+
+    test("IVY_PAT_1,IVY_PAT_11,IVY_PAT_12,Verify that the user is able to fill all fields and than Patient Profile opens successfully", async ({ page }) => {
         const patientsPage = new PatientsPage(page)
 
         await test.step("Navigate to patient registration page", async () => {
@@ -25,7 +28,6 @@ test.describe("Patients Page", () => {
 
         })
         await test.step("fill ALL fields click on save patient", async () => {
-            const patientName = utils.generateRandomName();
             await patientsPage.enterFirstNameField(patientName);
             await patientsPage.enterLastNameField(testData.newPatientForm.LastName)
             await patientsPage.enterEmailfield(testData.newPatientForm.email)
@@ -52,9 +54,11 @@ test.describe("Patients Page", () => {
             await patientsPage.clickpatientConsentCheckbox()
             await patientsPage.clickSavePatientButton()
             await patientsPage.expectToBeVisible(await patientsPage.getPatientName(patientName))
-            await expect(patientsPage.emailFieldLabel).toHaveText(testData.newPatientForm.email);
+            await patientsPage.expectToBeVisible(await patientsPage.getphoneFieldLabel(phoneNumber))
+            await expect.soft(patientsPage.emailFieldLabel).toHaveText(testData.newPatientForm.email);
             await expect(patientsPage.bloodGroupFieldLabel).toHaveText(testData.newPatientForm.bloodGroup)
             await expect(patientsPage.allergiesFieldLabel).toHaveText(testData.newPatientForm.knownAllergies)
+
 
 
         })
@@ -68,13 +72,13 @@ test.describe("Patients Page", () => {
             await patientsPage.expectToBeVisible(patientsPage.patientRegistrationHeading)
 
         })
-        await test.step("Verify that the validation message is displayed for an invalid 10-digit phone number", async () => {
-            const patientName = utils.generateRandomName();
-            await patientsPage.enterFirstNameField(patientName);
+        await test.step("Verify that the validation message is displayed for an invalid 10-digit phone number and on first name field for numbers and special characters", async () => {
+            await patientsPage.enterFirstNameField(testData.newPatientForm.firstNameTest1);
             await patientsPage.selectGenderField(testData.newPatientForm.gender)
             await patientsPage.selecthowDidYouHearAboutUsDropdown(testData.newPatientForm.howDidYouHearAboutUs)
             await patientsPage.enterPhoneNumberField(testData.newPatientForm.phoneNumbertest1)
             await patientsPage.clickSavePatientButton();
+            await expect(patientsPage.firstNameValidationMessage).toContainText("First name can only contain letters, spaces, hyphens, apostrophes, and periods")
             await expect(patientsPage.phoneNumberValidationMessage).toContainText("Enter a valid 10-digit mobile number (e.g. 9876543210, 09876543210, or +91 98765 43210).");
 
         })
@@ -94,7 +98,9 @@ test.describe("Patients Page", () => {
 
         })
     })
-    test("Verify the Family Sharing flow with an existing phone number", async ({ page }) => {
+
+    test("Verify the Family Sharing flow with an existing phone number and view and view and book appoint redirected to corresponding page", async ({ page }) => {
+
         const patientsPage = new PatientsPage(page)
 
         await test.step("Navigate to patient registration page", async () => {
@@ -104,7 +110,6 @@ test.describe("Patients Page", () => {
 
         })
         await test.step("fill required fields and click save Patient Button", async () => {
-            const patientName = utils.generateRandomName();
             await patientsPage.enterFirstNameField(patientName);
             await patientsPage.selectGenderField(testData.newPatientForm.gender)
             await patientsPage.selecthowDidYouHearAboutUsDropdown(testData.newPatientForm.howDidYouHearAboutUs)
@@ -124,7 +129,42 @@ test.describe("Patients Page", () => {
             await patientsPage.clickSaveFamilySharingButton();
             await expect(patientsPage.sharedWithLink).toBeVisible()
         })
+        await test.step("Navigate to patient profile page ", async () => {
+            await patientsPage.clickPatientsTab();
+            await patientsPage.enterSearchField(patientName);
+            await patientsPage.clickViewButton();
+            await patientsPage.clickbackButtonPatientProfile()
+        })
+        await test.step("Navigate to book appointment page ", async () => {
+            await patientsPage.enterSearchField(patientName);
+            await patientsPage.clickbookButtonPatientprofile();
+            await patientsPage.expectToBeVisible(patientsPage.patientCardName(patientName))
+        })
 
     })
+
+    test("Verify medical history get saved", async ({ page }) => {
+        const patientsPage = new PatientsPage(page)
+
+        await test.step("Navigate to patient profile page", async () => {
+            await patientsPage.clickPatientsTab();
+            await patientsPage.enterSearchField(patientName);
+            await patientsPage.clickViewButton();
+            await patientsPage.clickMedicalHistoryTab();
+
+        })
+        await test.step("fill medical history and click save medical history", async () => {
+            await patientsPage.selectThyroidConditionDropdown(testData.patientprofile.thyroidCondition)
+            await patientsPage.selectbloodPressureDropdown(testData.patientprofile.bloodpressure)
+            await patientsPage.enterLastCheckUpDate(testData.patientprofile.lastCheckUpDate)
+            await patientsPage.clickDiabetesCheckBox();
+            await patientsPage.clickusesTabaccoCheckBox();
+            await patientsPage.clickSaveMedicalHistoryButton();
+            await expect(patientsPage.successMedicalHistoryMessage).toBeVisible()
+
+        })
+
+    })
+
 
 })
