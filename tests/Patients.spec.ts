@@ -1,9 +1,7 @@
-import { test, expect } from "@playwright/test"
-import { LoginPage } from "../pages/LoginPage"
-import { ConfigManager } from "../utils/ConfigManager"
-import { PatientsPage } from "../pages/PatientsPage"
+
 import { utils } from "../utils/Utility"
 import testData from "../test-data/test-data.json";
+import { test, expect } from "../fixtures/testfixtures";
 
 
 
@@ -11,23 +9,18 @@ import testData from "../test-data/test-data.json";
 
 test.describe("Patients Page", () => {
     const patientName = utils.generateRandomName();
-    test.beforeEach(async ({ page }) => {
-        const loginPage = new LoginPage(page)
-        await loginPage.goto();
-        const credentials = ConfigManager.getCredentials();
-        await loginPage.login(credentials.email, credentials.password);
-    })
+    console.log(patientName)
 
-    test("IVY_PAT_1,IVY_PAT_11,IVY_PAT_12,Verify that the user is able to fill all fields and than Patient Profile opens successfully", async ({ page }) => {
-        const patientsPage = new PatientsPage(page)
 
-        await test.step("Navigate to patient registration page", async () => {
+    test("IVY_PAT_1, IVY_PAT_11, IVY_PAT_12,IVY_PAT_11,IVY_PAT_24,IVY_PAT_26,IVY_PAT_29,IVY_PAT_31,IVY_PAT_34,IVY_PAT_36,IVY_PAT_40,IVY_PAT_61 - Verify that a user can create a patient and validate details ", async ({ patientsPage }) => {
+
+        await test.step("Navigate to the Patient Registration page", async () => {
             await patientsPage.clickPatientsTab();
             await patientsPage.clickNewPatientButton();
             await patientsPage.expectToBeVisible(patientsPage.patientRegistrationHeading)
 
         })
-        await test.step("fill ALL fields click on save patient", async () => {
+        await test.step("Enter valid patient details and save the patient", async () => {
             await patientsPage.enterFirstNameField(patientName);
             await patientsPage.enterLastNameField(testData.newPatientForm.LastName)
             await patientsPage.enterEmailfield(testData.newPatientForm.email)
@@ -60,12 +53,48 @@ test.describe("Patients Page", () => {
             await expect(patientsPage.allergiesFieldLabel).toHaveText(testData.newPatientForm.knownAllergies)
 
 
-
         })
     })
-    test("Verify validation message is displayed for an invalid phone number and Verify Book appointment page Appears", async ({ page }) => {
-        const patientsPage = new PatientsPage(page)
+    test("IVY_PAT_2,IVY_PAT_5,IVY_PAT_62,search saved patient and verify view,book appointment button redirected to corresponding page.", async ({ patientsPage }) => {
 
+
+        await test.step("Navigate to patient profile page ", async () => {
+            await patientsPage.clickPatientsTab();
+            await patientsPage.enterSearchField(patientName);
+            await patientsPage.clickViewButton();
+            await patientsPage.clickbackButtonPatientProfile()
+        })
+        await test.step("Navigate to book appointment page ", async () => {
+            await patientsPage.enterSearchField(patientName);
+            await patientsPage.clickbookButtonPatientprofile();
+            await patientsPage.expectToBeVisible(patientsPage.patientCardName(patientName))
+        })
+
+    })
+    test(" IVY_PAT_63,Verify user can edit and update form details successfully.", async ({ patientsPage }) => {
+
+
+        await test.step("Navigate to the patient profile and open the Edit form", async () => {
+            await patientsPage.clickPatientsTab();
+            await patientsPage.clickViewButton();
+            await patientsPage.clickEditButton();
+
+        })
+        await test.step("Update the patient information and save the changes", async () => {
+            await patientsPage.enterFirstNameField(testData.patientprofile.firstNameTest2);
+            await patientsPage.enterEmailfield(testData.newPatientForm.email2)
+            await patientsPage.clickSaveChangesButton()
+            await patientsPage.expectToBeVisible(patientsPage.editSuccessMessage)
+            await expect(patientsPage.fullName).toContainText(testData.patientprofile.firstNameTest2);
+            await expect(patientsPage.emailFieldLabel).toContainText(testData.newPatientForm.email2);
+        })
+
+
+
+    })
+
+
+    test("IVY_PAT_13,IVY_PAT_16,IVY_PAT_17, IVY_PAT_23 Verify validation message is displayed and Verify Book appointment page Appears ", async ({ patientsPage }) => {
         await test.step("Navigate to patient registration page", async () => {
             await patientsPage.clickPatientsTab();
             await patientsPage.clickNewPatientButton();
@@ -82,10 +111,13 @@ test.describe("Patients Page", () => {
             await expect(patientsPage.phoneNumberValidationMessage).toContainText("Enter a valid 10-digit mobile number (e.g. 9876543210, 09876543210, or +91 98765 43210).");
 
         })
-        await test.step("Verify the Indian mobile number validation message after filling all required fields", async () => {
+        await test.step("Verify the Indian mobile number and first name character validation message after filling all required fields", async () => {
+            await patientsPage.firstNameField.clear();
             await patientsPage.phoneNumberField.clear();
+            await patientsPage.enterFirstNameField(testData.newPatientForm.firstNameTest2)
             await patientsPage.enterPhoneNumberField(testData.newPatientForm.phoneNumbertest2)
             await patientsPage.clickSavePatientButton();
+            await expect(patientsPage.chracterValidation).toContainText("First name must not exceed 100 characters")
             await expect(patientsPage.phoneNumberValidationMessage).toContainText("Indian mobile numbers must start with 6, 7, 8 or 9")
         })
         await test.step("verify the  save and book appointment button redirect to book appointment page", async () => {
@@ -99,9 +131,7 @@ test.describe("Patients Page", () => {
         })
     })
 
-    test("Verify the Family Sharing flow with an existing phone number and view and view and book appoint redirected to corresponding page", async ({ page }) => {
-
-        const patientsPage = new PatientsPage(page)
+    test("IVY_PAT_20,IVY_PAT_21, IVY_PAT_64,Verify the Family Sharing flow with an existing phone number ", async ({ patientsPage }) => {
 
         await test.step("Navigate to patient registration page", async () => {
             await patientsPage.clickPatientsTab();
@@ -110,6 +140,7 @@ test.describe("Patients Page", () => {
 
         })
         await test.step("fill required fields and click save Patient Button", async () => {
+
             await patientsPage.enterFirstNameField(patientName);
             await patientsPage.selectGenderField(testData.newPatientForm.gender)
             await patientsPage.selecthowDidYouHearAboutUsDropdown(testData.newPatientForm.howDidYouHearAboutUs)
@@ -129,24 +160,12 @@ test.describe("Patients Page", () => {
             await patientsPage.clickSaveFamilySharingButton();
             await expect(patientsPage.sharedWithLink).toBeVisible()
         })
-        await test.step("Navigate to patient profile page ", async () => {
-            await patientsPage.clickPatientsTab();
-            await patientsPage.enterSearchField(patientName);
-            await patientsPage.clickViewButton();
-            await patientsPage.clickbackButtonPatientProfile()
-        })
-        await test.step("Navigate to book appointment page ", async () => {
-            await patientsPage.enterSearchField(patientName);
-            await patientsPage.clickbookButtonPatientprofile();
-            await patientsPage.expectToBeVisible(patientsPage.patientCardName(patientName))
-        })
-
     })
 
-    test("Verify medical history get saved", async ({ page }) => {
-        const patientsPage = new PatientsPage(page)
+    test("Verify medical history got saved and recommended treatment get saved and deleted ", async ({ patientsPage }) => {
 
-        await test.step("Navigate to patient profile page", async () => {
+        await test.step("add new patient and navigate to medical history tab", async () => {
+
             await patientsPage.clickPatientsTab();
             await patientsPage.enterSearchField(patientName);
             await patientsPage.clickViewButton();
@@ -159,12 +178,30 @@ test.describe("Patients Page", () => {
             await patientsPage.enterLastCheckUpDate(testData.patientprofile.lastCheckUpDate)
             await patientsPage.clickDiabetesCheckBox();
             await patientsPage.clickusesTabaccoCheckBox();
+            await patientsPage.clickusesAlcoholCheckBox();
+            await patientsPage.clickPregnantCheckbox();
+            await patientsPage.clickRadioRTherapyHistory();
             await patientsPage.clickSaveMedicalHistoryButton();
             await expect(patientsPage.successMedicalHistoryMessage).toBeVisible()
 
         })
+        await test.step("Verify recommeded treatment got selected and deleted ", async ({ }) => {
+            await patientsPage.clickReccommendedTreatment();
+            await patientsPage.enterFirstRecommededTreatment(testData.patientprofile.treatment)
+            await patientsPage.clickSaveReccommendedTreatmentButton();
+            await expect(patientsPage.successMessageTreatmentUpdate).toContainText("Recommended treatments updated.");
+            await patientsPage.enterSecondRecommededTreatment(testData.patientprofile.treatment)
+            await patientsPage.clickRemoveTreatment();
+            await patientsPage.clickSaveReccommendedTreatmentButton();
+            await expect(patientsPage.successMessageTreatmentUpdate).toContainText("Recommended treatments updated.");
+
+
+        })
 
     })
+
+
+
 
 
 })

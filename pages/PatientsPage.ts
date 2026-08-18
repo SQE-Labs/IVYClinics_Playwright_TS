@@ -58,7 +58,21 @@ export class PatientsPage extends BasePage {
     readonly backButtonPatientProfile: Locator;
     readonly bookButtonPatientprofile: Locator;
     readonly patientCardName: Function;
-
+    readonly usesAlcoholCheckBox: Locator;
+    readonly editButton: Locator;
+    readonly editSuccessMessage: Locator;
+    readonly saveChangesButton: Locator;
+    readonly pregnantCheckbox: Locator;
+    readonly radioTherapyHistory: Locator;
+    readonly reccommendedTreatment: Locator;
+    readonly searchTreatmentField: Locator;
+    readonly saveReccommendedTreatmentButton: Locator;
+    readonly reccommendedTreatments: Locator;
+    readonly removeTreatmentButton: Locator;
+    readonly secondReccommendedTreatment: Locator;
+    readonly successMessageTreatmentUpdate: Locator
+    readonly fullName: Locator;
+    readonly chracterValidation: Locator;
 
     constructor(page: Page) {
         super(page)
@@ -104,7 +118,7 @@ export class PatientsPage extends BasePage {
         this.bloodGroupFieldLabel = page.locator('//span[text()="Blood Group"]/following::span[2]')
         this.allergiesFieldLabel = page.locator('//span[text()="Allergies"]/following::span[1]')
         this.searchBoxField = page.getByRole('textbox', { name: 'Search by name, phone, or email...' })
-        this.viewButton = page.locator('button').filter({ hasText: 'View' }).first()
+        this.viewButton = page.locator('button').filter({ hasText: 'View' }).last()
         this.medicalHistoryTab = page.getByText('Medical History', { exact: true })
         this.thyroidConditionDropdown = page.getByLabel('Thyroid Condition')
         this.bloodPressureDropdown = page.getByLabel('Blood Pressure')
@@ -117,9 +131,22 @@ export class PatientsPage extends BasePage {
         this.firstNameValidationMessage = page.locator('#first-name-error')
         this.backButtonPatientProfile = page.getByRole('button', { name: 'Back' })
         this.bookButtonPatientprofile = page.locator('button').filter({ hasText: 'Book' }).first()
-        this.patientCardName =  (name: string) => page.getByText(name);
-
-
+        this.patientCardName = (name: string) => page.getByText(name);
+        this.usesAlcoholCheckBox = page.getByLabel('Uses Alcohol');
+        this.editButton = page.getByText('Edit Patient');
+        this.editSuccessMessage = page.getByText("Patient information updated successfully");
+        this.saveChangesButton = page.getByText('Save Changes')
+        this.pregnantCheckbox = page.getByLabel('Pregnant')
+        this.radioTherapyHistory = page.getByLabel('Radiotherapy History')
+        this.reccommendedTreatment = page.getByRole('button', { name: 'Recommended Treatment' })
+        this.searchTreatmentField = page.getByRole('textbox', { name: 'Search treatments to add...' })
+        this.saveReccommendedTreatmentButton = page.getByText('Save', { exact: true })
+        this.reccommendedTreatments = page.locator("//span[contains(text(),'Chemical Peel – Salicylic Acid - 8 Sessions - 15% ')]")
+        this.secondReccommendedTreatment = page.locator("//span[contains(text(),'Chemical Peel – Salicylic Acid - 4 Sessions - 10% ')]")
+        this.removeTreatmentButton = page.locator('button').filter({ hasText: '×' }).first()
+        this.successMessageTreatmentUpdate = page.getByRole("alert").filter({ hasText: 'Recommended treatments updated.' })
+        this.fullName = page.locator('//dt[normalize-space()="Full Name"]/following-sibling::dd');
+        this.chracterValidation = page.locator('#first-name-error')
 
 
     }
@@ -262,6 +289,45 @@ export class PatientsPage extends BasePage {
     async clickbookButtonPatientprofile() {
         await this.click(this.bookButtonPatientprofile)
     }
+    async clickusesAlcoholCheckBox() {
+        await this.click(this.usesAlcoholCheckBox)
+    }
+    async clickEditButton() {
+        await this.click(this.editButton)
+    }
+    async clickSaveChangesButton() {
+        await this.click(this.saveChangesButton)
+    }
+    async clickPregnantCheckbox() {
+        await this.click(this.pregnantCheckbox)
+    }
+    async clickRadioRTherapyHistory() {
+        await this.click(this.radioTherapyHistory)
+    }
+    async clickReccommendedTreatment() {
+        await this.click(this.reccommendedTreatment)
+    }
+    async enterFirstRecommededTreatment(treatment: string) {
+        await this.fill(this.searchTreatmentField, treatment)
+        await this.reccommendedTreatments.hover();
+        await this.reccommendedTreatments.click();
+
+    }
+    async enterSecondRecommededTreatment(secondTreatment: string) {
+        await this.fill(this.searchTreatmentField, secondTreatment)
+        await this.secondReccommendedTreatment.hover();
+        await this.secondReccommendedTreatment.click();
+
+    }
+
+   
+    async clickSaveReccommendedTreatmentButton() {
+        await this.click(this.saveReccommendedTreatmentButton)
+    }
+    async clickRemoveTreatment() {
+        await this.click(this.removeTreatmentButton)
+    }
+
 
 
 }

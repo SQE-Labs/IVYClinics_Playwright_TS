@@ -34,8 +34,10 @@
   },
   "newPatientForm": {
     "email": "Test@gmail.com",
+    "email2": "Test2@gmail.com",
     "date": "07242026",
     "gender": "Male",
+    "gender2": "Female",
     "LastName": "Test",
     "occupation": "test",
     "category": "Hair (H)",
@@ -55,11 +57,16 @@
     "phoneNumbertest1": "12345",
     "phoneNumbertest2": "1234567890",
     "phoneBleongsToFieldpopup": "Self (the patient)",
-    "firstNameTest1": "12334"
+    "firstNameTest1": "12334",
+    "firstNameTest2": "Test 100 Charachter validation nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "firstName": "kunalTest"
   },
   "patientprofile": {
     "thyroidCondition": "Hypothyroid",
-    "bloodpressure":"Normal",
-    "lastCheckUpDate":"08292026"
+    "bloodpressure": "Normal",
+    "lastCheckUpDate": "08292026",
+    "firstNameTest2": "Franklin",
+    "treatment" : "Chemical Peel – Salicylic Acid",
+    "treatment2" : "Chemical Peel – Salicylic Acid"
   }
 }
