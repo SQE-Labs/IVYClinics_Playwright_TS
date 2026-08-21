@@ -40,27 +40,40 @@ pipeline {
                 echo 'Executing Regression Test Suite...'
                 echo '========================================='
 
-                bat 'npx playwright test'
+                bat 'npx playwright test --reporter=html'
             }
         }
     }
 
-    post {
+   post {
 
-        success {
-            echo '========================================='
-            echo 'REGRESSION TESTS PASSED'
-            echo '========================================='
-        }
+    always {
 
-        failure {
-            echo '========================================='
-            echo 'REGRESSION TESTS FAILED'
-            echo '========================================='
-        }
+        echo 'Publishing Playwright HTML Report...'
 
-        always {
-            echo 'Regression Automation Pipeline Finished.'
-        }
+        publishHTML(target: [
+            allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'playwright-report',
+            reportFiles: 'index.html',
+            reportName: 'Playwright Regression Report',
+            reportTitles: 'IVY Clinics Regression Automation'
+        ])
+
+        echo 'Regression Automation Pipeline Finished.'
     }
+
+    success {
+        echo '========================================='
+        echo 'REGRESSION TESTS PASSED'
+        echo '========================================='
+    }
+
+    failure {
+        echo '========================================='
+        echo 'REGRESSION TESTS FAILED'
+        echo '========================================='
+    }
+}
 }
