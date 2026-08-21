@@ -12,7 +12,7 @@ type MyFixtures = {
         phoneNumber: string;
         gender: string;
         howDidYouHearAboutUs: string;
-        Mrn :string
+        Mrn: string
     };
 };
 
@@ -58,7 +58,7 @@ export const test = base.extend<MyFixtures>({
 
         await patientsPage.clickpatientConsentCheckbox();
         await patientsPage.clickSavePatientButton();
-         const Mrn = await patientsPage.getMrnLabel();
+        const Mrn = await patientsPage.getMrnLabel();
 
         await use({
             firstName,
