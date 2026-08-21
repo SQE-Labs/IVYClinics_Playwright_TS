@@ -7,7 +7,7 @@ test.describe("Login", () => {
   test(
     "should login successfully and display dashboard greeting",
     {
-      tag: ["@smoke", "@regression"],
+      tag: ["@smoke"],
     },
     async ({ page }) => {
       const loginPage = new LoginPage(page);
