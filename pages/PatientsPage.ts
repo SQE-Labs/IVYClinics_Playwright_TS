@@ -44,7 +44,7 @@ export class PatientsPage extends BasePage {
     readonly bloodGroupFieldLabel: Locator;
     readonly allergiesFieldLabel: Locator;
     readonly searchBoxField: Locator;
-    readonly viewButton: Locator;
+    readonly viewButton: Function;
     readonly medicalHistoryTab: Locator;
     readonly thyroidConditionDropdown: Locator;
     readonly bloodPressureDropdown: Locator;
@@ -73,6 +73,18 @@ export class PatientsPage extends BasePage {
     readonly successMessageTreatmentUpdate: Locator
     readonly fullName: Locator;
     readonly chracterValidation: Locator;
+    readonly investigationsTab: Locator;
+    readonly investigationTypeDropdown: Locator;
+    readonly uploadFilesButton: Locator;
+    readonly lipidProfileButton: Locator;
+    readonly viewInlineButton: Locator;
+    readonly deleteInlineButton: Locator;
+    readonly uploadSuccessMessage: Locator;
+    readonly downloadInlineButton: Locator
+    readonly deletePopupButton: Locator;
+    readonly deleteSuccessMessage: Locator;
+    readonly patientNameList: Function;
+    readonly mrnLable: Locator;
 
     constructor(page: Page) {
         super(page)
@@ -118,7 +130,8 @@ export class PatientsPage extends BasePage {
         this.bloodGroupFieldLabel = page.locator('//span[text()="Blood Group"]/following::span[2]')
         this.allergiesFieldLabel = page.locator('//span[text()="Allergies"]/following::span[1]')
         this.searchBoxField = page.getByRole('textbox', { name: 'Search by name, phone, or email...' })
-        this.viewButton = page.locator('button').filter({ hasText: 'View' }).last()
+        // this.viewButton = page.locator('button').filter({ hasText: 'View' }).first()
+        this.mrnLable  = page.locator('//span[text()="MRN"]/following::span[1]')
         this.medicalHistoryTab = page.getByText('Medical History', { exact: true })
         this.thyroidConditionDropdown = page.getByLabel('Thyroid Condition')
         this.bloodPressureDropdown = page.getByLabel('Blood Pressure')
@@ -146,7 +159,19 @@ export class PatientsPage extends BasePage {
         this.removeTreatmentButton = page.locator('button').filter({ hasText: '×' }).first()
         this.successMessageTreatmentUpdate = page.getByRole("alert").filter({ hasText: 'Recommended treatments updated.' })
         this.fullName = page.locator('//dt[normalize-space()="Full Name"]/following-sibling::dd');
-        this.chracterValidation = page.locator('#first-name-error')
+        this.chracterValidation = page.locator('#first-name-error');
+        this.investigationsTab = page.getByRole('button', { name: 'Investigations' })
+        this.investigationTypeDropdown = page.locator('select._select_mircc_22._md_mircc_71');
+        this.uploadFilesButton = page.getByRole("button", { name: "Upload Files" });
+        this.lipidProfileButton = page.getByRole('button', { name: 'Lipid Profile' })
+        this.viewInlineButton = page.getByTitle('View inline');
+        this.deleteInlineButton = page.getByTitle('Delete');
+        this.uploadSuccessMessage = page.getByRole("alert").filter({ hasText: "uploaded successfully" });
+        this.downloadInlineButton = page.getByTitle("Download");
+        this.deletePopupButton = page.locator('//div[contains(@class,"_actions_")]//button[.//span[normalize-space()="Delete"]]')
+        this.deleteSuccessMessage = this.page.getByRole("alert").filter({ hasText: "deleted." });
+        this.patientNameList = (Mrn: string) => this.page.locator("tr").filter({ hasText: Mrn });
+        this.viewButton = (Mrn: string) => this.patientNameList(Mrn).getByRole("button", { name: "View" });
 
 
     }
@@ -256,8 +281,8 @@ export class PatientsPage extends BasePage {
     async enterSearchField(search: string) {
         await this.fill(this.searchBoxField, search)
     }
-    async clickViewButton() {
-        await this.click(this.viewButton)
+    async clickViewButton(Mrn:string) {
+        await this.viewButton(Mrn).click();
     }
     async clickMedicalHistoryTab() {
         await this.click(this.medicalHistoryTab)
@@ -317,17 +342,50 @@ export class PatientsPage extends BasePage {
         await this.fill(this.searchTreatmentField, secondTreatment)
         await this.secondReccommendedTreatment.hover();
         await this.secondReccommendedTreatment.click();
-
     }
-
-   
     async clickSaveReccommendedTreatmentButton() {
         await this.click(this.saveReccommendedTreatmentButton)
     }
     async clickRemoveTreatment() {
         await this.click(this.removeTreatmentButton)
     }
-
-
+    async clickInvestigationsTab() {
+        await this.click(this.investigationsTab)
+    }
+    async selectInvestigationTypeDropdown(investigationType: string) {
+        await this.investigationTypeDropdown.selectOption({
+            label: investigationType
+        });
+    }
+    async uploadFile(filePath: string) {
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.uploadFilesButton.click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(filePath);
+    }
+    async clickLipidProfileButton() {
+        await this.click(this.lipidProfileButton)
+    }
+    async clickViewInlineButton() {
+        await this.click(this.viewInlineButton)
+    }
+    async clickDeleteInlineButton() {
+        await this.click(this.deleteInlineButton)
+    }
+    async clickDownloadInlineButton() {
+        const downloadPromise = this.page.waitForEvent("download");
+        await this.click(this.downloadInlineButton)
+        const download = await downloadPromise;
+        return download;
+    }
+    async clickDeletePopupButton() {
+        await this.click(this.deletePopupButton)
+    }
+    async getPatientNameList(firstName: string) {
+        return this.patientNameList(firstName);
+    }
+    async getMrnLabel(): Promise<string> {
+    return await this.mrnLable.innerText();
+}
 
 }
