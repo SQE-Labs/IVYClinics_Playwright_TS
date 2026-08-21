@@ -40,12 +40,28 @@ pipeline {
                 echo 'Executing Smoke Test Suite...'
                 echo '========================================='
 
-                bat 'npx playwright test --grep "@smoke"'
+                bat 'npx playwright test --grep "@smoke" --reporter=html'
             }
         }
     }
 
     post {
+         always {
+
+            echo 'Publishing Playwright HTML Report...'
+
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright Smoke Report',
+                reportTitles: 'IVY Clinics Smoke Automation'
+            ])
+
+            echo 'Smoke Automation Pipeline Finished.'
+        }
 
         success {
             echo '========================================='
