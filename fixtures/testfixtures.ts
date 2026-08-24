@@ -1,5 +1,4 @@
 import { test as base, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
 import { PatientsPage } from "../pages/PatientsPage";
 import { AppointmentsPage } from "../pages/AppointmentsPage";
 import { ConfigManager } from "../utils/ConfigManager";
@@ -18,26 +17,11 @@ type MyFixtures = {
     appointmentsPage: AppointmentsPage;
 };
 
+
 export const test = base.extend<MyFixtures>({
 
-    patientsPage: async ({ page }, use) => {
-        const loginPage = new LoginPage(page);
-
-        await loginPage.goto();
-
-        const credentials = ConfigManager.getCredentials();
-
-        await loginPage.login(
-            credentials.email,
-            credentials.password
-        );
-
+    createpatient: async ({ page }, use) => {
         const patientsPage = new PatientsPage(page);
-
-        await use(patientsPage);
-    },
-
-    createpatient: async ({ patientsPage }, use) => {
 
         const firstName = utils.generateRandomName();
         const phoneNumber = utils.generateRandomPhoneNumber();
@@ -71,23 +55,23 @@ export const test = base.extend<MyFixtures>({
         });
     },
 
-    appointmentsPage: async ({ page }, use) => {
+    // appointmentsPage: async ({ page }, use) => {
 
-        const loginPage = new LoginPage(page);
+    //     const loginPage = new LoginPage(page);
 
-        await loginPage.goto();
+    //     await loginPage.goto();
 
-        const credentials = ConfigManager.getCredentials();
+    //     const credentials = ConfigManager.getCredentials();
 
-        await loginPage.login(
-            credentials.email,
-            credentials.password
-        );
+    //     await loginPage.login(
+    //         credentials.email,
+    //         credentials.password
+    //     );
 
-        const appointmentsPage = new AppointmentsPage(page);
+    //     const appointmentsPage = new AppointmentsPage(page);
 
-        await use(appointmentsPage);
-    }
+    //     await use(appointmentsPage);
+    // }
 });
 
 export { expect };
