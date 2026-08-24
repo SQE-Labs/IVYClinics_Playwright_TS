@@ -91,63 +91,67 @@ pipeline {
             echo '========================================='
 
             emailext(
-                subject: "IVY Clinics | Smoke Automation | Build #${BUILD_NUMBER} | ${currentBuild.currentResult}",
+    to: 'surjeet.singh@sqelabs.com',
 
-                body: """
-                    <html>
-                    <body>
+    subject: "IVY Clinics | Smoke Automation | Build #${BUILD_NUMBER} | ${currentBuild.currentResult}",
 
-                        <h2>IVY Clinics - Smoke Automation</h2>
+    body: """
+        <html>
+        <body>
 
-                        <p>Smoke automation execution has completed.</p>
+            <h2>IVY Clinics - Smoke Automation</h2>
 
-                        <table border="1" cellpadding="6" cellspacing="0">
-                            <tr>
-                                <td><b>Job</b></td>
-                                <td>${JOB_NAME}</td>
-                            </tr>
+            <p>Smoke automation execution has completed.</p>
 
-                            <tr>
-                                <td><b>Build Number</b></td>
-                                <td>#${BUILD_NUMBER}</td>
-                            </tr>
+            <table border="1" cellpadding="6" cellspacing="0">
 
-                            <tr>
-                                <td><b>Status</b></td>
-                                <td>${currentBuild.currentResult}</td>
-                            </tr>
+                <tr>
+                    <td><b>Job</b></td>
+                    <td>${JOB_NAME}</td>
+                </tr>
 
-                            <tr>
-                                <td><b>Build URL</b></td>
-                                <td>
-                                    <a href="${BUILD_URL}">
-                                        View Jenkins Build
-                                    </a>
-                                </td>
-                            </tr>
+                <tr>
+                    <td><b>Build Number</b></td>
+                    <td>#${BUILD_NUMBER}</td>
+                </tr>
 
-                            <tr>
-                                <td><b>Playwright Report</b></td>
-                                <td>
-                                    <a href="${BUILD_URL}Playwright_20Smoke_20Report/">
-                                        View Smoke Test Report
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
+                <tr>
+                    <td><b>Status</b></td>
+                    <td>${currentBuild.currentResult}</td>
+                </tr>
 
-                        <br>
+                <tr>
+                    <td><b>Build URL</b></td>
+                    <td>
+                        <a href="${BUILD_URL}">
+                            View Jenkins Build
+                        </a>
+                    </td>
+                </tr>
 
-                        <p>
-                            This is an automated notification from Jenkins.
-                        </p>
+                <tr>
+                    <td><b>Playwright Report</b></td>
+                    <td>
+                        <a href="${BUILD_URL}Playwright_20Smoke_20Report/">
+                            View Smoke Test Report
+                        </a>
+                    </td>
+                </tr>
 
-                    </body>
-                    </html>
-                """,
+            </table>
 
-                mimeType: 'text/html'
-            )
+            <br>
+
+            <p>
+                This is an automated notification from Jenkins.
+            </p>
+
+        </body>
+        </html>
+    """,
+
+    mimeType: 'text/html'
+)
 
             echo 'Smoke Automation Pipeline Finished.'
         }
