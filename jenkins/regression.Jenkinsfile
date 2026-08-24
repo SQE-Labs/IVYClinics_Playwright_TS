@@ -84,7 +84,6 @@ pipeline {
             echo '========================================='
             echo 'Sending Regression Test Email Notification...'
             echo '========================================='
-
             emailext(
                 to: '$DEFAULT_RECIPIENTS',
 
