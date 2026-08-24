@@ -10,7 +10,16 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: 1,
 
-  reporter: [["html", { open: "never" }], ["list"]],
+  reporter: [
+    ["html", { open: "never" }],
+    [
+      "allure-playwright",
+      {
+        resultsDir: "allure-results",
+      },
+    ],
+    ["list"],
+  ],
 
   timeout: 30000,
 

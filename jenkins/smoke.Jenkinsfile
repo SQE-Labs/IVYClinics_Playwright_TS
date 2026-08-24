@@ -40,7 +40,7 @@ pipeline {
                 echo 'Executing Smoke Test Suite...'
                 echo '========================================='
 
-                bat 'npx playwright test --grep "@smoke" --reporter=html'
+                bat 'npx playwright test --grep "@smoke"'
             }
         }
     }
@@ -70,6 +70,10 @@ pipeline {
 
         always {
 
+            // =====================================================
+            // 1. PUBLISH PLAYWRIGHT HTML REPORT
+            // =====================================================
+
             echo '========================================='
             echo 'Publishing Playwright HTML Report...'
             echo '========================================='
@@ -86,72 +90,107 @@ pipeline {
 
             echo 'Playwright HTML Report Published.'
 
+
+            // =====================================================
+            // 2. PUBLISH ALLURE REPORT
+            // =====================================================
+
+            echo '========================================='
+            echo 'Publishing Allure Report...'
+            echo '========================================='
+
+            allure(
+                commandline: 'Allure',
+                includeProperties: false,
+                jdk: '',
+                resultPolicy: 'LEAVE_AS_IS',
+                results: [[path: 'allure-results']]
+            )
+
+            echo 'Allure Report Published.'
+
+
+            // =====================================================
+            // 3. SEND EMAIL
+            // =====================================================
+
             echo '========================================='
             echo 'Sending Smoke Test Email Notification...'
             echo '========================================='
 
             emailext(
-    to: '$DEFAULT_RECIPIENTS',
+                to: '$DEFAULT_RECIPIENTS',
 
-    subject: "IVY Clinics | Smoke Automation | Build #${BUILD_NUMBER} | ${currentBuild.currentResult}",
+                subject: "IVY Clinics | Smoke Automation | Build #${BUILD_NUMBER} | ${currentBuild.currentResult}",
 
-    body: """
-        <html>
-        <body>
+                body: """
+                    <html>
+                    <body>
 
-            <h2>IVY Clinics - Smoke Automation</h2>
+                        <h2>IVY Clinics - Smoke Automation</h2>
 
-            <p>Smoke automation execution has completed.</p>
+                        <p>
+                            Smoke automation execution has completed.
+                        </p>
 
-            <table border="1" cellpadding="6" cellspacing="0">
+                        <table border="1" cellpadding="6" cellspacing="0">
 
-                <tr>
-                    <td><b>Job</b></td>
-                    <td>${JOB_NAME}</td>
-                </tr>
+                            <tr>
+                                <td><b>Job</b></td>
+                                <td>${JOB_NAME}</td>
+                            </tr>
 
-                <tr>
-                    <td><b>Build Number</b></td>
-                    <td>#${BUILD_NUMBER}</td>
-                </tr>
+                            <tr>
+                                <td><b>Build Number</b></td>
+                                <td>#${BUILD_NUMBER}</td>
+                            </tr>
 
-                <tr>
-                    <td><b>Status</b></td>
-                    <td>${currentBuild.currentResult}</td>
-                </tr>
+                            <tr>
+                                <td><b>Status</b></td>
+                                <td>${currentBuild.currentResult}</td>
+                            </tr>
 
-                <tr>
-                    <td><b>Build URL</b></td>
-                    <td>
-                        <a href="${BUILD_URL}">
-                            View Jenkins Build
-                        </a>
-                    </td>
-                </tr>
+                            <tr>
+                                <td><b>Build URL</b></td>
+                                <td>
+                                    <a href="${BUILD_URL}">
+                                        View Jenkins Build
+                                    </a>
+                                </td>
+                            </tr>
 
-                <tr>
-                    <td><b>Playwright Report</b></td>
-                    <td>
-                        <a href="${BUILD_URL}Playwright_20Smoke_20Report/">
-                            View Smoke Test Report
-                        </a>
-                    </td>
-                </tr>
+                            <tr>
+                                <td><b>Allure Report</b></td>
+                                <td>
+                                    <a href="${BUILD_URL}allure/">
+                                        View Allure Report
+                                    </a>
+                                </td>
+                            </tr>
 
-            </table>
+                            <tr>
+                                <td><b>Playwright Report</b></td>
+                                <td>
+                                    <a href="${BUILD_URL}Playwright_20Smoke_20Report/">
+                                        View Smoke Test Report
+                                    </a>
+                                </td>
+                            </tr>
 
-            <br>
+                        </table>
 
-            <p>
-                This is an automated notification from Jenkins.
-            </p>
+                        <br>
 
-        </body>
-        </html>
-    """,
+                        <p>
+                            This is an automated notification from Jenkins.
+                        </p>
 
-    mimeType: 'text/html'
-)
+                    </body>
+                    </html>
+                """,
+
+                mimeType: 'text/html'
+            )
 
             echo 'Smoke Automation Pipeline Finished.'
         }
