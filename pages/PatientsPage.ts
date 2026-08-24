@@ -44,7 +44,7 @@ export class PatientsPage extends BasePage {
     readonly bloodGroupFieldLabel: Locator;
     readonly allergiesFieldLabel: Locator;
     readonly searchBoxField: Locator;
-    readonly viewButton: Locator;
+    readonly viewButton: Function;
     readonly medicalHistoryTab: Locator;
     readonly thyroidConditionDropdown: Locator;
     readonly bloodPressureDropdown: Locator;
@@ -73,6 +73,44 @@ export class PatientsPage extends BasePage {
     readonly successMessageTreatmentUpdate: Locator
     readonly fullName: Locator;
     readonly chracterValidation: Locator;
+    readonly investigationsTab: Locator;
+    readonly investigationTypeDropdown: Locator;
+    readonly uploadFilesButton: Locator;
+    readonly lipidProfileButton: Locator;
+    readonly viewInlineButton: Locator;
+    readonly deleteInlineButton: Locator;
+    readonly uploadSuccessMessage: Locator;
+    readonly downloadInlineButton: Locator
+    readonly deletePopupButton: Locator;
+    readonly deleteSuccessMessage: Locator;
+    readonly patientNameList: Function;
+    readonly mrnLable: Locator;
+    readonly treatmentPlansTab: Locator;
+    readonly createPlanButton: Locator;
+    readonly planNameField: Locator;
+    readonly descriptionField: Locator;
+    readonly searchTreatment: Locator;
+    readonly searchValidationMessage: Locator;
+    readonly popupCreatePlanButton: Locator;
+    readonly firstTreatementPlan: Locator;
+    readonly toothField: Locator;
+    readonly notesField: Locator;
+    readonly treatmentPlanCreatedMessage: Locator;
+    readonly planCard: Function;
+    readonly planStatus: Function;
+    readonly addItemButton: Locator
+    readonly searchSecondTreatment: Locator;
+    readonly secondTreatementPlan: Locator;
+    readonly firstTreatmentDetail: Function;
+    readonly secondTreatmentDetail: Function;
+    readonly markCompletedButton: Locator;
+    readonly yesCompleteButton: Locator;
+    readonly popupCloseButton: Locator;
+    readonly cancelPlanButton: Locator;
+    readonly yesCancelPlan: Locator;
+
+
+
 
     constructor(page: Page) {
         super(page)
@@ -118,7 +156,7 @@ export class PatientsPage extends BasePage {
         this.bloodGroupFieldLabel = page.locator('//span[text()="Blood Group"]/following::span[2]')
         this.allergiesFieldLabel = page.locator('//span[text()="Allergies"]/following::span[1]')
         this.searchBoxField = page.getByRole('textbox', { name: 'Search by name, phone, or email...' })
-        this.viewButton = page.locator('button').filter({ hasText: 'View' }).last()
+        this.mrnLable = page.locator('//span[text()="MRN"]/following::span[1]')
         this.medicalHistoryTab = page.getByText('Medical History', { exact: true })
         this.thyroidConditionDropdown = page.getByLabel('Thyroid Condition')
         this.bloodPressureDropdown = page.getByLabel('Blood Pressure')
@@ -146,8 +184,42 @@ export class PatientsPage extends BasePage {
         this.removeTreatmentButton = page.locator('button').filter({ hasText: '×' }).first()
         this.successMessageTreatmentUpdate = page.getByRole("alert").filter({ hasText: 'Recommended treatments updated.' })
         this.fullName = page.locator('//dt[normalize-space()="Full Name"]/following-sibling::dd');
-        this.chracterValidation = page.locator('#first-name-error')
-
+        this.chracterValidation = page.locator('#first-name-error');
+        this.investigationsTab = page.getByRole('button', { name: 'Investigations' })
+        this.investigationTypeDropdown = page.locator('select._select_mircc_22._md_mircc_71');
+        this.uploadFilesButton = page.getByRole("button", { name: "Upload Files" });
+        this.lipidProfileButton = page.getByRole('button', { name: 'Lipid Profile' })
+        this.viewInlineButton = page.getByTitle('View inline');
+        this.deleteInlineButton = page.getByTitle('Delete');
+        this.uploadSuccessMessage = page.getByRole("alert").filter({ hasText: "uploaded successfully" });
+        this.downloadInlineButton = page.getByTitle("Download");
+        this.deletePopupButton = page.locator('//div[contains(@class,"_actions_")]//button[.//span[normalize-space()="Delete"]]')
+        this.deleteSuccessMessage = this.page.getByRole("alert").filter({ hasText: "deleted." });
+        this.patientNameList = (Mrn: string) => this.page.locator("tr").filter({ hasText: Mrn });
+        this.viewButton = (Mrn: string) => this.patientNameList(Mrn).getByRole("button", { name: "View" });
+        this.treatmentPlansTab = page.getByRole('button', { name: 'Treatment Plans' })
+        this.createPlanButton = page.getByRole('button', { name: 'Create Plan' })
+        this.planNameField = page.getByRole('textbox', { name: 'Plan Name*' })
+        this.descriptionField = page.getByRole('textbox', { name: 'Description (optional)' })
+        this.searchValidationMessage = page.locator("//input[@placeholder = 'Search treatments...']//parent::div//following-sibling::span")
+        this.popupCreatePlanButton = page.locator('//button[span= "Cancel"]//following-sibling::button')
+        this.searchTreatment = page.locator("div._itemRow_1ao8e_46").filter({ has: page.locator("div._itemNumber_1ao8e_56", { hasText: "1" }) }).getByPlaceholder("Search treatments...");
+        this.searchSecondTreatment = page.locator("div._itemRow_1ao8e_46").filter({ has: page.locator("div._itemNumber_1ao8e_56", { hasText: "2" }) }).getByPlaceholder("Search treatments...");
+        this.firstTreatementPlan = page.getByText('Chemical Peel – Salicylic Acid - 4 Sessions - 10% Discount')
+        this.secondTreatementPlan = page.getByText('Chemical Peel – Salicylic Acid - 4 Sessions - 10% Discount')
+        this.toothField = page.getByRole('textbox', { name: 'Tooth / Area' })
+        this.notesField = page.getByRole('textbox', { name: 'Notes' })
+        this.treatmentPlanCreatedMessage = this.page.getByRole("alert").filter({ hasText: "Treatment plan created successfully" });
+        this.planCard = (planName: string) => this.page.locator("button").filter({ has: this.page.locator("span").filter({ hasText: planName }) });
+        this.planStatus = (planName: string) => this.page.locator("span").filter({ hasText: planName }).locator("xpath=following-sibling::span[1]");
+        this.addItemButton = page.getByRole('button', { name: '+ Add Item' })
+        this.firstTreatmentDetail = (treatment: string) => this.page.getByText(treatment).first();
+        this.secondTreatmentDetail = (treatment: string) => this.page.getByText(treatment).nth(1);
+        this.markCompletedButton = page.getByRole('button', { name: 'Mark Completed' })
+        this.yesCompleteButton = page.getByRole('button', { name: 'Yes, Complete' })
+        this.popupCloseButton = page.getByRole('button', { name: 'Close modal' })
+        this.cancelPlanButton = page.getByRole('button', { name: 'Cancel Plan' })
+        this.yesCancelPlan = page.getByRole('button', { name: 'Yes, Cancel Plan' })
 
     }
 
@@ -256,8 +328,8 @@ export class PatientsPage extends BasePage {
     async enterSearchField(search: string) {
         await this.fill(this.searchBoxField, search)
     }
-    async clickViewButton() {
-        await this.click(this.viewButton)
+    async clickViewButton(Mrn: string) {
+        await this.viewButton(Mrn).click();
     }
     async clickMedicalHistoryTab() {
         await this.click(this.medicalHistoryTab)
@@ -317,17 +389,104 @@ export class PatientsPage extends BasePage {
         await this.fill(this.searchTreatmentField, secondTreatment)
         await this.secondReccommendedTreatment.hover();
         await this.secondReccommendedTreatment.click();
-
     }
-
-   
     async clickSaveReccommendedTreatmentButton() {
         await this.click(this.saveReccommendedTreatmentButton)
     }
     async clickRemoveTreatment() {
         await this.click(this.removeTreatmentButton)
     }
+    async clickInvestigationsTab() {
+        await this.click(this.investigationsTab)
+    }
+    async selectInvestigationTypeDropdown(investigationType: string) {
+        await this.investigationTypeDropdown.selectOption({
+            label: investigationType
+        });
+    }
+    async uploadFile(filePath: string) {
+        const fileChooserPromise = this.page.waitForEvent('filechooser');
+        await this.uploadFilesButton.click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(filePath);
+    }
+    async clickLipidProfileButton() {
+        await this.click(this.lipidProfileButton)
+    }
+    async clickViewInlineButton() {
+        await this.click(this.viewInlineButton)
+    }
+    async clickDeleteInlineButton() {
+        await this.click(this.deleteInlineButton)
+    }
+    async clickDownloadInlineButton() {
+        const downloadPromise = this.page.waitForEvent("download");
+        await this.click(this.downloadInlineButton)
+        const download = await downloadPromise;
+        return download;
+    }
+    async clickDeletePopupButton() {
+        await this.click(this.deletePopupButton)
+    }
+    async getPatientNameList(firstName: string) {
+        return this.patientNameList(firstName);
+    }
+    async getMrnLabel(): Promise<string> {
+        return await this.mrnLable.innerText();
+    }
+    async clickTreatmentPlansTab() {
+        await this.click(this.treatmentPlansTab)
 
+    }
+    async clickCreatePlanButton() {
+        await this.click(this.createPlanButton)
+    }
+    async enterPlanNameField(planName: string) {
+        await this.fill(this.planNameField, planName)
+    }
+    async enterDescriptionField(Description: string) {
+        await this.fill(this.descriptionField, Description)
+    }
+    async clickpopupCreatePlanButton() {
+        await this.click(this.popupCreatePlanButton)
+    }
+    async enterFirstTreatmentPlan(treatment: string) {
+        await this.fill(this.searchTreatment, treatment)
+        await this.firstTreatementPlan.hover();
+        await this.firstTreatementPlan.click();
 
+    }
+    async enterSecondTreatmentPlan(treatment: string) {
+        await this.fill(this.searchSecondTreatment, treatment)
+        await this.secondTreatementPlan.hover();
+        await this.secondTreatementPlan.click();
 
+    }
+    async entertoothField(tooth: string) {
+        await this.fill(this.toothField, tooth)
+    }
+    async enterNotesField(notes: string) {
+        await this.fill(this.notesField, notes)
+    }
+    async clickPlanCard(planName: string) {
+        await this.planCard(planName).click();
+    }
+    async clickAddItemButton() {
+        await this.click(this.addItemButton)
+    }
+    async clickMarkCompletedButton() {
+        await this.click(this.markCompletedButton)
+    }
+    async clickYesComplete() {
+        await this.click(this.yesCompleteButton)
+    }
+    async clickpopupCloseButton() {
+        await this.click(this.popupCloseButton)
+    }
+    async clickCancelPlanButton() {
+        await this.click(this.cancelPlanButton)
+    }
+    async clickyesCancelPlan() {
+        await this.click(this.yesCancelPlan)
+    }
 }

@@ -35,7 +35,7 @@
   "newPatientForm": {
     "email": "Test@gmail.com",
     "email2": "Test2@gmail.com",
-    "date": "07242026",
+    "date": "07022026",
     "gender": "Male",
     "gender2": "Female",
     "LastName": "Test",
@@ -62,11 +62,28 @@
     "firstName": "kunalTest"
   },
   "patientprofile": {
-    "thyroidCondition": "Hypothyroid",
-    "bloodpressure": "Normal",
-    "lastCheckUpDate": "08292026",
-    "firstNameTest2": "Franklin",
-    "treatment" : "Chemical Peel – Salicylic Acid",
-    "treatment2" : "Chemical Peel – Salicylic Acid"
+    "medicalHistory": {
+      "thyroidCondition": "Hypothyroid",
+      "bloodpressure": "Normal",
+      "lastCheckUpDate": "08292026"
+    },
+    "recommededTreatment": {
+      "treatment": "Chemical Peel – Salicylic Acid"
+    },
+    "patientDetails": {
+      "firstNameTest3": "Franklin"
+    },
+    "investigations": {
+      "investigationType": "Lipid Profile",
+      "file": "test-data/files/TestFileTS.pdf"
+    },
+    "treatmentPlan": {
+      "firstName": "TestPlan",
+      "description":"testDescription",
+      "firstTreatment":"Chemical Peel – Salicylic Acid",
+      "tooth": "test",
+      "Notes": "test",
+      "secondTreatment": "Chemical Peel – Salicylic Acid - 4 Sessions - 10% Discount"
+    }
   }
 }
