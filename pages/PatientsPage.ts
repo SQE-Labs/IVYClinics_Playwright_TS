@@ -85,6 +85,32 @@ export class PatientsPage extends BasePage {
     readonly deleteSuccessMessage: Locator;
     readonly patientNameList: Function;
     readonly mrnLable: Locator;
+    readonly treatmentPlansTab: Locator;
+    readonly createPlanButton: Locator;
+    readonly planNameField: Locator;
+    readonly descriptionField: Locator;
+    readonly searchTreatment: Locator;
+    readonly searchValidationMessage: Locator;
+    readonly popupCreatePlanButton: Locator;
+    readonly firstTreatementPlan: Locator;
+    readonly toothField: Locator;
+    readonly notesField: Locator;
+    readonly treatmentPlanCreatedMessage: Locator;
+    readonly planCard: Function;
+    readonly planStatus: Function;
+    readonly addItemButton: Locator
+    readonly searchSecondTreatment: Locator;
+    readonly secondTreatementPlan: Locator;
+    readonly firstTreatmentDetail: Function;
+    readonly secondTreatmentDetail: Function;
+    readonly markCompletedButton: Locator;
+    readonly yesCompleteButton: Locator;
+    readonly popupCloseButton: Locator;
+    readonly cancelPlanButton: Locator;
+    readonly yesCancelPlan: Locator;
+
+
+
 
     constructor(page: Page) {
         super(page)
@@ -130,8 +156,7 @@ export class PatientsPage extends BasePage {
         this.bloodGroupFieldLabel = page.locator('//span[text()="Blood Group"]/following::span[2]')
         this.allergiesFieldLabel = page.locator('//span[text()="Allergies"]/following::span[1]')
         this.searchBoxField = page.getByRole('textbox', { name: 'Search by name, phone, or email...' })
-        // this.viewButton = page.locator('button').filter({ hasText: 'View' }).first()
-        this.mrnLable  = page.locator('//span[text()="MRN"]/following::span[1]')
+        this.mrnLable = page.locator('//span[text()="MRN"]/following::span[1]')
         this.medicalHistoryTab = page.getByText('Medical History', { exact: true })
         this.thyroidConditionDropdown = page.getByLabel('Thyroid Condition')
         this.bloodPressureDropdown = page.getByLabel('Blood Pressure')
@@ -172,7 +197,29 @@ export class PatientsPage extends BasePage {
         this.deleteSuccessMessage = this.page.getByRole("alert").filter({ hasText: "deleted." });
         this.patientNameList = (Mrn: string) => this.page.locator("tr").filter({ hasText: Mrn });
         this.viewButton = (Mrn: string) => this.patientNameList(Mrn).getByRole("button", { name: "View" });
-
+        this.treatmentPlansTab = page.getByRole('button', { name: 'Treatment Plans' })
+        this.createPlanButton = page.getByRole('button', { name: 'Create Plan' })
+        this.planNameField = page.getByRole('textbox', { name: 'Plan Name*' })
+        this.descriptionField = page.getByRole('textbox', { name: 'Description (optional)' })
+        this.searchValidationMessage = page.locator("//input[@placeholder = 'Search treatments...']//parent::div//following-sibling::span")
+        this.popupCreatePlanButton = page.locator('//button[span= "Cancel"]//following-sibling::button')
+        this.searchTreatment = page.locator("div._itemRow_1ao8e_46").filter({ has: page.locator("div._itemNumber_1ao8e_56", { hasText: "1" }) }).getByPlaceholder("Search treatments...");
+        this.searchSecondTreatment = page.locator("div._itemRow_1ao8e_46").filter({ has: page.locator("div._itemNumber_1ao8e_56", { hasText: "2" }) }).getByPlaceholder("Search treatments...");
+        this.firstTreatementPlan = page.getByText('Chemical Peel – Salicylic Acid - 4 Sessions - 10% Discount')
+        this.secondTreatementPlan = page.getByText('Chemical Peel – Salicylic Acid - 4 Sessions - 10% Discount')
+        this.toothField = page.getByRole('textbox', { name: 'Tooth / Area' })
+        this.notesField = page.getByRole('textbox', { name: 'Notes' })
+        this.treatmentPlanCreatedMessage = this.page.getByRole("alert").filter({ hasText: "Treatment plan created successfully" });
+        this.planCard = (planName: string) => this.page.locator("button").filter({ has: this.page.locator("span").filter({ hasText: planName }) });
+        this.planStatus = (planName: string) => this.page.locator("span").filter({ hasText: planName }).locator("xpath=following-sibling::span[1]");
+        this.addItemButton = page.getByRole('button', { name: '+ Add Item' })
+        this.firstTreatmentDetail = (treatment: string) => this.page.getByText(treatment).first();
+        this.secondTreatmentDetail = (treatment: string) => this.page.getByText(treatment).nth(1);
+        this.markCompletedButton = page.getByRole('button', { name: 'Mark Completed' })
+        this.yesCompleteButton = page.getByRole('button', { name: 'Yes, Complete' })
+        this.popupCloseButton = page.getByRole('button', { name: 'Close modal' })
+        this.cancelPlanButton = page.getByRole('button', { name: 'Cancel Plan' })
+        this.yesCancelPlan = page.getByRole('button', { name: 'Yes, Cancel Plan' })
 
     }
 
@@ -281,7 +328,7 @@ export class PatientsPage extends BasePage {
     async enterSearchField(search: string) {
         await this.fill(this.searchBoxField, search)
     }
-    async clickViewButton(Mrn:string) {
+    async clickViewButton(Mrn: string) {
         await this.viewButton(Mrn).click();
     }
     async clickMedicalHistoryTab() {
@@ -385,7 +432,61 @@ export class PatientsPage extends BasePage {
         return this.patientNameList(firstName);
     }
     async getMrnLabel(): Promise<string> {
-    return await this.mrnLable.innerText();
-}
+        return await this.mrnLable.innerText();
+    }
+    async clickTreatmentPlansTab() {
+        await this.click(this.treatmentPlansTab)
 
+    }
+    async clickCreatePlanButton() {
+        await this.click(this.createPlanButton)
+    }
+    async enterPlanNameField(planName: string) {
+        await this.fill(this.planNameField, planName)
+    }
+    async enterDescriptionField(Description: string) {
+        await this.fill(this.descriptionField, Description)
+    }
+    async clickpopupCreatePlanButton() {
+        await this.click(this.popupCreatePlanButton)
+    }
+    async enterFirstTreatmentPlan(treatment: string) {
+        await this.fill(this.searchTreatment, treatment)
+        await this.firstTreatementPlan.hover();
+        await this.firstTreatementPlan.click();
+
+    }
+    async enterSecondTreatmentPlan(treatment: string) {
+        await this.fill(this.searchSecondTreatment, treatment)
+        await this.secondTreatementPlan.hover();
+        await this.secondTreatementPlan.click();
+
+    }
+    async entertoothField(tooth: string) {
+        await this.fill(this.toothField, tooth)
+    }
+    async enterNotesField(notes: string) {
+        await this.fill(this.notesField, notes)
+    }
+    async clickPlanCard(planName: string) {
+        await this.planCard(planName).click();
+    }
+    async clickAddItemButton() {
+        await this.click(this.addItemButton)
+    }
+    async clickMarkCompletedButton() {
+        await this.click(this.markCompletedButton)
+    }
+    async clickYesComplete() {
+        await this.click(this.yesCompleteButton)
+    }
+    async clickpopupCloseButton() {
+        await this.click(this.popupCloseButton)
+    }
+    async clickCancelPlanButton() {
+        await this.click(this.cancelPlanButton)
+    }
+    async clickyesCancelPlan() {
+        await this.click(this.yesCancelPlan)
+    }
 }
