@@ -91,7 +91,7 @@ pipeline {
             echo '========================================='
 
             emailext(
-    to: 'surjeet.singh@sqelabs.com',
+    to: '$DEFAULT_RECIPIENTS',
 
     subject: "IVY Clinics | Smoke Automation | Build #${BUILD_NUMBER} | ${currentBuild.currentResult}",
 
