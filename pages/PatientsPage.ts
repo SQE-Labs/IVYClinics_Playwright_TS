@@ -84,7 +84,7 @@ export class PatientsPage extends BasePage {
     readonly deletePopupButton: Locator;
     readonly deleteSuccessMessage: Locator;
     readonly patientNameList: Function;
-    readonly mrnLable: Locator;
+    readonly mrnLabel: Locator;
     readonly treatmentPlansTab: Locator;
     readonly createPlanButton: Locator;
     readonly planNameField: Locator;
@@ -108,6 +108,8 @@ export class PatientsPage extends BasePage {
     readonly popupCloseButton: Locator;
     readonly cancelPlanButton: Locator;
     readonly yesCancelPlan: Locator;
+    readonly nextButton: Locator;
+    readonly pageNumber: Locator;
 
 
 
@@ -156,7 +158,7 @@ export class PatientsPage extends BasePage {
         this.bloodGroupFieldLabel = page.locator('//span[text()="Blood Group"]/following::span[2]')
         this.allergiesFieldLabel = page.locator('//span[text()="Allergies"]/following::span[1]')
         this.searchBoxField = page.getByRole('textbox', { name: 'Search by name, phone, or email...' })
-        this.mrnLable = page.locator('//span[text()="MRN"]/following::span[1]')
+        this.mrnLabel = page.locator('//span[text()="MRN"]/following::span[1]')
         this.medicalHistoryTab = page.getByText('Medical History', { exact: true })
         this.thyroidConditionDropdown = page.getByLabel('Thyroid Condition')
         this.bloodPressureDropdown = page.getByLabel('Blood Pressure')
@@ -220,6 +222,8 @@ export class PatientsPage extends BasePage {
         this.popupCloseButton = page.getByRole('button', { name: 'Close modal' })
         this.cancelPlanButton = page.getByRole('button', { name: 'Cancel Plan' })
         this.yesCancelPlan = page.getByRole('button', { name: 'Yes, Cancel Plan' })
+        this.nextButton = page.getByRole('button', { name: 'Next' })
+        this.pageNumber = page.getByText(/^Page \d+ of \d+$/);
 
     }
 
@@ -432,9 +436,10 @@ export class PatientsPage extends BasePage {
         return this.patientNameList(firstName);
     }
     async getMrnLabel(): Promise<string> {
-        return await this.mrnLable.innerText();
+        return await this.mrnLabel.innerText();
     }
     async clickTreatmentPlansTab() {
+
         await this.click(this.treatmentPlansTab)
 
     }
@@ -489,4 +494,20 @@ export class PatientsPage extends BasePage {
     async clickyesCancelPlan() {
         await this.click(this.yesCancelPlan)
     }
+    
+    async getCurrentPageNumber(): Promise<number> {
+        const text = await this.pageNumber.textContent();
+        const match = text?.match(/Page (\d+) of \d+/);
+
+        return Number(match?.[1]);
+    }
+
+    async clickNextButton() {
+        await this.nextButton.click();
+    }
+
+    async getPageNumberText(): Promise<string> {
+        return (await this.pageNumber.textContent()) ?? '';
+    }
+
 }
