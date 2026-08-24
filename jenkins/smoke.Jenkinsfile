@@ -48,6 +48,7 @@ pipeline {
     post {
 
         success {
+
             echo '========================================='
             echo 'SMOKE TESTS PASSED'
             echo '========================================='
@@ -60,6 +61,7 @@ pipeline {
         }
 
         failure {
+
             echo '========================================='
             echo 'SMOKE TESTS FAILED'
             echo 'Regression Automation will NOT be triggered.'
@@ -67,7 +69,10 @@ pipeline {
         }
 
         always {
+
+            echo '========================================='
             echo 'Publishing Playwright HTML Report...'
+            echo '========================================='
 
             publishHTML(target: [
                 allowMissing: true,
@@ -78,6 +83,71 @@ pipeline {
                 reportName: 'Playwright Smoke Report',
                 reportTitles: 'IVY Clinics Smoke Automation'
             ])
+
+            echo 'Playwright HTML Report Published.'
+
+            echo '========================================='
+            echo 'Sending Smoke Test Email Notification...'
+            echo '========================================='
+
+            emailext(
+                subject: "IVY Clinics | Smoke Automation | Build #${BUILD_NUMBER} | ${currentBuild.currentResult}",
+
+                body: """
+                    <html>
+                    <body>
+
+                        <h2>IVY Clinics - Smoke Automation</h2>
+
+                        <p>Smoke automation execution has completed.</p>
+
+                        <table border="1" cellpadding="6" cellspacing="0">
+                            <tr>
+                                <td><b>Job</b></td>
+                                <td>${JOB_NAME}</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Build Number</b></td>
+                                <td>#${BUILD_NUMBER}</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Status</b></td>
+                                <td>${currentBuild.currentResult}</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Build URL</b></td>
+                                <td>
+                                    <a href="${BUILD_URL}">
+                                        View Jenkins Build
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Playwright Report</b></td>
+                                <td>
+                                    <a href="${BUILD_URL}Playwright_20Smoke_20Report/">
+                                        View Smoke Test Report
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br>
+
+                        <p>
+                            This is an automated notification from Jenkins.
+                        </p>
+
+                    </body>
+                    </html>
+                """,
+
+                mimeType: 'text/html'
+            )
 
             echo 'Smoke Automation Pipeline Finished.'
         }
