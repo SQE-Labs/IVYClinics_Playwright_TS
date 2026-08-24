@@ -1,5 +1,5 @@
-import { Locator, Page } from '@playwright/test';
-import { BasePage } from '../base/BasePage';
+import { Locator, Page } from "@playwright/test";
+import { BasePage } from "../base/BasePage";
 
 export class DashboardPage extends BasePage {
   private readonly greetingHeading: Locator;
@@ -17,40 +17,50 @@ export class DashboardPage extends BasePage {
   readonly patientRegistrationPageheading: Locator;
   readonly bookAppointmentPageheading: Locator;
 
-
   constructor(page: Page) {
     super(page);
-    this.greetingHeading = page.getByRole('heading', {
-      name: /^Good (morning|afternoon|evening), Demo$/,
+    this.greetingHeading = page.getByRole("heading", {
+      name: /^Good (a|b|c), Demo$/,
     });
 
-    this.patientsTile = page.getByRole('heading', { name: 'Patients' });
+    this.patientsTile = page.getByRole("heading", { name: "Patients" });
 
-    this.appointmentsTile = page.getByRole('heading', { name: 'Appointments' })
+    this.appointmentsTile = page.getByRole("heading", { name: "Appointments" });
 
-    this.communicationTile = page.getByRole('heading', { name: 'communications' })
+    this.communicationTile = page.getByRole("heading", {
+      name: "communications",
+    });
 
-    this.newPatientButton = page.getByRole('link', { name: 'New Patient' })
+    this.newPatientButton = page.getByRole("link", { name: "New Patient" });
 
-    this.bookAppointmentButton = page.getByRole('link', { name: 'Book Appointment' })
+    this.bookAppointmentButton = page.getByRole("link", {
+      name: "Book Appointment",
+    });
 
-    this.clinicsDropdown = page.locator("(//header)[1]/div[2]")
+    this.clinicsDropdown = page.locator("(//header)[1]/div[2]");
 
-    this.selectClinicOption = (clinicName: string) => page.getByRole('option', { name: clinicName })
+    this.selectClinicOption = (clinicName: string) =>
+      page.getByRole("option", { name: clinicName });
 
-    this.welcomeText = page.getByText(/Welcome to/i)
+    this.welcomeText = page.getByText(/Welcome to/i);
 
-    this.patientsPageHeading = page.getByRole('heading', { name: 'patients' })
+    this.patientsPageHeading = page.getByRole("heading", { name: "patients" });
 
-    this.appointmentsPageHeading = page.getByRole('heading', { name: 'Appointments' })
+    this.appointmentsPageHeading = page.getByRole("heading", {
+      name: "Appointments",
+    });
 
-    this.communicationsPageHeading = page.getByRole('heading', { name: 'Communications' })
+    this.communicationsPageHeading = page.getByRole("heading", {
+      name: "Communications",
+    });
 
-    this.patientRegistrationPageheading = page.getByRole('heading', { name: 'Patient Registration' })
+    this.patientRegistrationPageheading = page.getByRole("heading", {
+      name: "Patient Registration",
+    });
 
-    this.bookAppointmentPageheading = page.getByRole('heading', { name: 'Book Appointment' })
-
-
+    this.bookAppointmentPageheading = page.getByRole("heading", {
+      name: "Book Appointment",
+    });
   }
 
   async verifyGreetingVisible() {
@@ -63,7 +73,6 @@ export class DashboardPage extends BasePage {
 
   async clickPatientsTile() {
     await this.click(this.patientsTile);
-
   }
   async clickAppointmentTile() {
     await this.click(this.appointmentsTile);
@@ -84,5 +93,4 @@ export class DashboardPage extends BasePage {
   async selectClinic(clinicName: string) {
     await this.click(this.selectClinicOption(clinicName));
   }
-
 }
