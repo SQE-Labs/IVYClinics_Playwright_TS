@@ -1,7 +1,5 @@
 import { test as base, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
 import { PatientsPage } from "../pages/PatientsPage";
-import { ConfigManager } from "../utils/ConfigManager";
 import { utils } from "../utils/Utility";
 import testData from "../test-data/test-data.json";
 
@@ -16,26 +14,11 @@ type MyFixtures = {
     };
 };
 
+
 export const test = base.extend<MyFixtures>({
 
-    patientsPage: async ({ page }, use) => {
-        const loginPage = new LoginPage(page);
-
-        await loginPage.goto();
-
-        const credentials = ConfigManager.getCredentials();
-
-        await loginPage.login(
-            credentials.email,
-            credentials.password
-        );
-
+    createpatient: async ({ page }, use) => {
         const patientsPage = new PatientsPage(page);
-
-        await use(patientsPage);
-    },
-
-    createpatient: async ({ patientsPage }, use) => {
 
         const firstName = utils.generateRandomName();
         const phoneNumber = utils.generateRandomPhoneNumber();
