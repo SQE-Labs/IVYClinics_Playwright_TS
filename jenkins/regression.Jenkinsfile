@@ -40,7 +40,7 @@ pipeline {
                 echo 'Executing Regression Test Suite...'
                 echo '========================================='
 
-                bat 'npx playwright test --reporter=html'
+                bat 'npx playwright test'
             }
         }
     }
@@ -82,8 +82,23 @@ pipeline {
             echo 'Playwright HTML Report Published.'
 
             echo '========================================='
+            echo 'Publishing Allure Report...'
+            echo '========================================='
+
+            allure(
+                commandline: 'Allure',
+                includeProperties: false,
+                jdk: '',
+                resultPolicy: 'LEAVE_AS_IS',
+                results: [[path: 'allure-results']]
+            )
+
+            echo 'Allure Report Published.'
+
+            echo '========================================='
             echo 'Sending Regression Test Email Notification...'
             echo '========================================='
+
             emailext(
                 to: '$DEFAULT_RECIPIENTS',
 
@@ -124,6 +139,15 @@ pipeline {
                             </tr>
 
                             <tr>
+                                <td><b>Allure Report</b></td>
+                                <td>
+                                    <a href="${BUILD_URL}allure/">
+                                        View Allure Report
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <td><b>Playwright Report</b></td>
                                 <td>
                                     <a href="${BUILD_URL}Playwright_20Regression_20Report/">
@@ -146,6 +170,7 @@ pipeline {
 
                 mimeType: 'text/html'
             )
+
             echo 'Regression Automation Pipeline Finished.'
         }
     }
