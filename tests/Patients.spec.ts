@@ -56,7 +56,7 @@ test.describe("Patients Page", () => {
     test("IVY_PAT_2,IVY_PAT_5,IVY_PAT_62,search saved patient and verify view,book appointment button redirected to corresponding page.", async ({ patientsPage, createpatient }) => {
 
 
-        await test.step("Navigate to patient profile page ", async () => {
+        await test.step(" search and Navigate to patient profile page ", async () => {
             await patientsPage.clickPatientsTab();
             console.log(createpatient.firstName)
             await patientsPage.enterSearchField(createpatient.Mrn);
@@ -189,23 +189,108 @@ test.describe("Patients Page", () => {
 
     test("Verify that users can upload investigation files, sort the files correctly, and delete the uploaded files successfully.", async ({ patientsPage, createpatient }) => {
 
-        await test.step("click on investigation tab and upload file", async () => {
+        await test.step("Navigate to the patient profile and open the Investigations tab", async () => {
             await patientsPage.clickPatientsTab();
             await patientsPage.enterSearchField(createpatient.Mrn);
             await patientsPage.clickViewButton(createpatient.Mrn);
-            await patientsPage.clickInvestigationsTab()
-            await patientsPage.selectInvestigationTypeDropdown(testData.patientprofile.investigations.investigationType)
-            await patientsPage.uploadFile(testData.patientprofile.investigations.file);
-            await expect(patientsPage.uploadSuccessMessage).toBeVisible();
-            await patientsPage.clickLipidProfileButton();
+            await patientsPage.clickInvestigationsTab();
+        });
 
+        await test.step("Select the investigation type and upload the file", async () => {
+            await patientsPage.selectInvestigationTypeDropdown(testData.patientprofile.investigations.investigationType);
+            await patientsPage.uploadFile(
+                testData.patientprofile.investigations.file
+            );
+            await expect(patientsPage.uploadSuccessMessage).toBeVisible();
+        });
+
+        await test.step("Download the uploaded investigation file and verify the filename", async () => {
+            await patientsPage.clickLipidProfileButton();
             const download = await patientsPage.clickDownloadInlineButton();
             expect(download.suggestedFilename()).toBe("TestFileTS.pdf");
-            await patientsPage.clickDeleteInlineButton();
-            await patientsPage.clickDeletePopupButton()
-            await expect(patientsPage.deleteSuccessMessage).toBeVisible();
+        });
 
+        await test.step("Delete the uploaded investigation file and verify deletion", async () => {
+            await patientsPage.clickDeleteInlineButton();
+            await patientsPage.clickDeletePopupButton();
+
+            await expect(patientsPage.deleteSuccessMessage).toBeVisible();
+        });
+    });
+    test("Verify that user can create plan ,cancel it and complete it and validate status", async ({ patientsPage, createpatient }) => {
+
+
+        await test.step("Navigate to patient profile page ", async () => {
+            await patientsPage.clickPatientsTab()
+            await patientsPage.enterSearchField(createpatient.Mrn);
+            await patientsPage.clickViewButton(createpatient.Mrn);
         })
 
+        await test.step("Navigate to Treatment Plans and open the Create Plan form", async () => {
+            await patientsPage.clickTreatmentPlansTab();
+            await patientsPage.clickCreatePlanButton();
+        });
+
+        await test.step("Enter treatment plan details and validate treatment selection", async () => {
+            const planName = testData.patientprofile.treatmentPlan.firstName;
+
+            await patientsPage.enterPlanNameField(planName);
+            await patientsPage.enterDescriptionField(
+                testData.patientprofile.treatmentPlan.description
+            );
+            await patientsPage.clickpopupCreatePlanButton();
+
+            await expect(patientsPage.searchValidationMessage)
+                .toHaveText("Select a treatment");
+        });
+
+        await test.step("Add the first treatment with tooth and notes details", async () => {
+            await patientsPage.clickAddItemButton();
+
+            const firstTreatment =
+                testData.patientprofile.treatmentPlan.firstTreatment;
+            await patientsPage.enterFirstTreatmentPlan(firstTreatment);
+            await patientsPage.entertoothField(
+                testData.patientprofile.treatmentPlan.tooth
+            );
+            await patientsPage.enterNotesField(
+                testData.patientprofile.treatmentPlan.Notes
+            );
+        });
+
+        await test.step("Add the second treatment", async () => {
+            const secondTreatment =
+                testData.patientprofile.treatmentPlan.secondTreatment;
+            await patientsPage.enterSecondTreatmentPlan(secondTreatment);
+        });
+
+        await test.step("Create the treatment plan and verify successful creation", async () => {
+            const planName = testData.patientprofile.treatmentPlan.firstName;
+            await patientsPage.clickpopupCreatePlanButton();
+            await patientsPage.expectToBeVisible(patientsPage.treatmentPlanCreatedMessage);
+            await expect(patientsPage.planStatus(planName)).toHaveText("Active");
+        });
+
+        await test.step("Verify the treatments are added to treatment plan and status change accordingly", async () => {
+            const planName = testData.patientprofile.treatmentPlan.firstName;
+            const firstTreatment = testData.patientprofile.treatmentPlan.firstTreatment;
+            const secondTreatment = testData.patientprofile.treatmentPlan.secondTreatment;
+            await patientsPage.clickPlanCard(planName);
+            await expect(patientsPage.firstTreatmentDetail(firstTreatment)).toContainText(firstTreatment);
+            await expect(patientsPage.secondTreatmentDetail(secondTreatment)).toContainText(secondTreatment);
+            await patientsPage.clickMarkCompletedButton();
+            await patientsPage.clickYesComplete();
+            await patientsPage.clickpopupCloseButton();
+            await expect(patientsPage.planStatus(planName)).toHaveText("Completed");
+            await patientsPage.clickPlanCard(planName);
+            await patientsPage.clickCancelPlanButton();
+            await patientsPage.clickyesCancelPlan();
+            await patientsPage.clickpopupCloseButton();
+            await expect(patientsPage.planStatus(planName)).toHaveText("Cancelled");
+        });
+
     })
+
+
+
 })
