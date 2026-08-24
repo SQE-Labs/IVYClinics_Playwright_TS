@@ -20,7 +20,7 @@ export class DashboardPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.greetingHeading = page.getByRole("heading", {
-      name: /^Good (a|b|c), Demo$/,
+      name: /^Good (morning|afternoon|evening), Demo$/,
     });
 
     this.patientsTile = page.getByRole("heading", { name: "Patients" });
