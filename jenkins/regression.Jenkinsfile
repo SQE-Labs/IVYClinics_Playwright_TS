@@ -147,7 +147,6 @@ pipeline {
 
                 mimeType: 'text/html'
             )
-
             echo 'Regression Automation Pipeline Finished.'
         }
     }
