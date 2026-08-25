@@ -80,7 +80,6 @@ pipeline {
             ])
 
             echo 'Playwright HTML Report Published.'
-
             echo '========================================='
             echo 'Publishing Allure Report...'
             echo '========================================='
