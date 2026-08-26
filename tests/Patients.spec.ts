@@ -6,30 +6,19 @@ import { LoginPage } from "../pages/LoginPage";
 import { ConfigManager } from "../utils/ConfigManager";
 import { PatientsPage } from "../pages/PatientsPage";
 
-
-
-
-
-
 test.describe("Patients Page", () => {
     test.beforeEach(async ({ page }) => {
         const loginPage = new LoginPage(page);
         await loginPage.goto();
         const credentials = ConfigManager.getCredentials();
         await loginPage.login(credentials.email, credentials.password);
-
     })
-
     test("IVY_PAT_1, IVY_PAT_11, IVY_PAT_12,IVY_PAT_11,IVY_PAT_24,IVY_PAT_26,IVY_PAT_29,IVY_PAT_31,IVY_PAT_34,IVY_PAT_36,IVY_PAT_40,IVY_PAT_61 - Verify that a user can create a patient and validate details ", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
-
-
         await test.step("Navigate to the Patient Registration page", async () => {
-
             await patientsPage.clickPatientsTab();
             await patientsPage.clickNewPatientButton();
             await patientsPage.expectToBeVisible(patientsPage.patientRegistrationHeading)
-
         })
         await test.step("Enter valid patient details and save the patient", async () => {
             const patientName = utils.generateRandomName();
@@ -56,6 +45,7 @@ test.describe("Patients Page", () => {
             await patientsPage.entercontactPhoneField(utils.generateRandomPhoneNumber())
             await patientsPage.selectRelationshipDropdownField(testData.newPatientForm.relationship)
             await patientsPage.enterPhoneBelongsField(testData.newPatientForm.phoneBleongsto)
+            await expect(patientsPage.patientConsentCheckbox).not.toBeChecked();
             await patientsPage.clickpatientConsentCheckbox()
             await patientsPage.clickSavePatientButton()
             await patientsPage.expectToBeVisible(await patientsPage.getPatientName(patientName))
@@ -63,13 +53,10 @@ test.describe("Patients Page", () => {
             await expect.soft(patientsPage.emailFieldLabel).toHaveText(testData.newPatientForm.email);
             await expect(patientsPage.bloodGroupFieldLabel).toHaveText(testData.newPatientForm.bloodGroup)
             await expect(patientsPage.allergiesFieldLabel).toHaveText(testData.newPatientForm.knownAllergies)
-
-
         })
     })
-    test("IVY_PAT_2,IVY_PAT_5,IVY_PAT_62,search saved patient and verify view,book appointment button redirected to corresponding page.", async ({ page, createpatient }) => {
+    test("IVY_PAT_2,IVY_PAT_5,IVY_PAT_62,IVY_PAT_9,search saved patient and verify view,book appointment button redirected to corresponding page.", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
-
         await test.step(" search and Navigate to patient profile page ", async () => {
             await patientsPage.clickPatientsTab();
             console.log(createpatient.firstName)
@@ -82,16 +69,13 @@ test.describe("Patients Page", () => {
             await patientsPage.clickbookButtonPatientprofile();
             await patientsPage.expectToBeVisible(patientsPage.patientCardName(createpatient.Mrn))
         })
-
     })
     test(" IVY_PAT_63,Verify user can edit and update form details successfully.", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
-
         await test.step("Navigate to the patient profile and open the Edit form", async () => {
             await patientsPage.clickPatientsTab();
             await patientsPage.clickViewButton(createpatient.Mrn);
             await patientsPage.clickEditButton();
-
         })
         await test.step("Update the patient information and save the changes", async () => {
             await patientsPage.enterFirstNameField(testData.patientprofile.patientDetails.firstNameTest3);
@@ -101,12 +85,7 @@ test.describe("Patients Page", () => {
             await expect(patientsPage.fullName).toContainText(testData.patientprofile.patientDetails.firstNameTest3);
             await expect(patientsPage.emailFieldLabel).toContainText(testData.newPatientForm.email2);
         })
-
-
-
     })
-
-
     test("IVY_PAT_13,IVY_PAT_16,IVY_PAT_17, IVY_PAT_23 Verify validation message is displayed and Verify Book appointment page Appears ", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to patient registration page", async () => {
@@ -166,25 +145,19 @@ test.describe("Patients Page", () => {
             await expect(patientsPage.sharedWithLink).toBeVisible()
         })
     })
-    test("Verify Next button navigates to next page", async ({ page }) => {
+    test("IVY_PAT_3,Verify Next button navigates to next page", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to patient profile page ", async () => {
             await patientsPage.clickPatientsTab()
         })
-
         const currentPage = await patientsPage.getCurrentPageNumber();
-
         await patientsPage.clickNextButton();
         await patientsPage.clickNextButton();
-
         const pageText = await patientsPage.getPageNumberText();
-
         expect(pageText).toMatch(
             new RegExp(`^Page ${currentPage + 2} of \\d+$`)
         );
-
     });
-
     test("Verify medical history got saved and recommended treatment get saved and deleted ", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("add new patient and navigate to medical history tab", async () => {
@@ -192,23 +165,31 @@ test.describe("Patients Page", () => {
             await patientsPage.enterSearchField(createpatient.Mrn);
             await patientsPage.clickViewButton(createpatient.Mrn);
             await patientsPage.clickMedicalHistoryTab();
-
         })
         await test.step("fill medical history and click save medical history", async () => {
             await patientsPage.selectThyroidConditionDropdown(testData.patientprofile.medicalHistory.thyroidCondition)
             await patientsPage.selectbloodPressureDropdown(testData.patientprofile.medicalHistory.bloodpressure)
             await patientsPage.enterLastCheckUpDate(testData.patientprofile.medicalHistory.lastCheckUpDate)
             await patientsPage.clickDiabetesCheckBox();
+            await expect(patientsPage.diabetesCheckBox).toBeChecked();
             await patientsPage.clickusesTabaccoCheckBox();
+            await expect(patientsPage.usesTabaccoCheckBox).toBeChecked();
             await patientsPage.clickusesAlcoholCheckBox();
+            await expect(patientsPage.usesAlcoholCheckBox).toBeChecked();
             await patientsPage.clickPregnantCheckbox();
+            await expect(patientsPage.pregnantCheckbox).toBeChecked();
             await patientsPage.clickRadioRTherapyHistory();
+            await expect(patientsPage.radioTherapyHistory).toBeChecked();
+            await patientsPage.clickCurrentlyMedicationCheckBox();
+            await expect(patientsPage.currentlyMedicationCheckBox).toBeChecked();
+            await patientsPage.enterMedicationDetails(testData.patientprofile.medicalHistory.medication)
+            
             await patientsPage.clickSaveMedicalHistoryButton();
             await expect(patientsPage.successMedicalHistoryMessage).toBeVisible()
-
         })
-        await test.step("Verify recommeded treatment got selected and deleted ", async ({ }) => {
+        await test.step("Verify recommended treatment got selected and deleted ", async ({ }) => {
             await patientsPage.clickReccommendedTreatment();
+            await expect(patientsPage.saveReccommendedTreatmentButton).toBeDisabled();
             await patientsPage.enterFirstRecommededTreatment(testData.patientprofile.recommendedTreatment.treatment)
             await patientsPage.clickSaveReccommendedTreatmentButton();
             await expect(patientsPage.successMessageTreatmentUpdate).toContainText("Recommended treatments updated.");
@@ -218,7 +199,6 @@ test.describe("Patients Page", () => {
             await expect(patientsPage.successMessageTreatmentUpdate).toContainText("Recommended treatments updated.");
         })
     })
-
     test("Verify that users can upload investigation files, sort the files correctly, and delete the uploaded files successfully.", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to the patient profile and open the Investigations tab", async () => {
@@ -227,7 +207,6 @@ test.describe("Patients Page", () => {
             await patientsPage.clickViewButton(createpatient.Mrn);
             await patientsPage.clickInvestigationsTab();
         });
-
         await test.step("Select the investigation type and upload the file", async () => {
             await patientsPage.selectInvestigationTypeDropdown(testData.patientprofile.investigations.investigationType);
             await patientsPage.uploadFile(
@@ -235,50 +214,40 @@ test.describe("Patients Page", () => {
             );
             await expect(patientsPage.uploadSuccessMessage).toBeVisible();
         });
-
         await test.step("Download the uploaded investigation file and verify the filename", async () => {
             await patientsPage.clickLipidProfileButton();
             const download = await patientsPage.clickDownloadInlineButton();
             expect(download.suggestedFilename()).toBe("TestFileTS.pdf");
         });
-
         await test.step("Delete the uploaded investigation file and verify deletion", async () => {
             await patientsPage.clickDeleteInlineButton();
             await patientsPage.clickDeletePopupButton();
-
             await expect(patientsPage.deleteSuccessMessage).toBeVisible();
         });
     });
     test("Verify that user can create plan ,cancel it and complete it and validate status", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
-
         await test.step("Navigate to patient profile page ", async () => {
             await patientsPage.clickPatientsTab()
             await patientsPage.enterSearchField(createpatient.Mrn);
             await patientsPage.clickViewButton(createpatient.Mrn);
         })
-
         await test.step("Navigate to Treatment Plans and open the Create Plan form", async () => {
             await patientsPage.clickTreatmentPlansTab();
             await patientsPage.clickCreatePlanButton();
         });
-
         await test.step("Enter treatment plan details and validate treatment selection", async () => {
             const planName = testData.patientprofile.treatmentPlan.firstName;
-
             await patientsPage.enterPlanNameField(planName);
             await patientsPage.enterDescriptionField(
                 testData.patientprofile.treatmentPlan.description
             );
             await patientsPage.clickpopupCreatePlanButton();
-
             await expect(patientsPage.searchValidationMessage)
                 .toHaveText("Select a treatment");
         });
-
         await test.step("Add the first treatment with tooth and notes details", async () => {
             await patientsPage.clickAddItemButton();
-
             const firstTreatment =
                 testData.patientprofile.treatmentPlan.firstTreatment;
             await patientsPage.enterFirstTreatmentPlan(firstTreatment);
@@ -289,20 +258,17 @@ test.describe("Patients Page", () => {
                 testData.patientprofile.treatmentPlan.Notes
             );
         });
-
         await test.step("Add the second treatment", async () => {
             const secondTreatment =
                 testData.patientprofile.treatmentPlan.secondTreatment;
             await patientsPage.enterSecondTreatmentPlan(secondTreatment);
         });
-
         await test.step("Create the treatment plan and verify successful creation", async () => {
             const planName = testData.patientprofile.treatmentPlan.firstName;
             await patientsPage.clickpopupCreatePlanButton();
             await patientsPage.expectToBeVisible(patientsPage.treatmentPlanCreatedMessage);
             await expect(patientsPage.planStatus(planName)).toHaveText("Active");
         });
-
         await test.step("Verify the treatments are added to treatment plan and status change accordingly", async () => {
             const planName = testData.patientprofile.treatmentPlan.firstName;
             const firstTreatment = testData.patientprofile.treatmentPlan.firstTreatment;
@@ -320,10 +286,5 @@ test.describe("Patients Page", () => {
             await patientsPage.clickpopupCloseButton();
             await expect(patientsPage.planStatus(planName)).toHaveText("Cancelled");
         });
-
     })
-
-
-
-
 })

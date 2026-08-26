@@ -65,7 +65,8 @@
     "medicalHistory": {
       "thyroidCondition": "Hypothyroid",
       "bloodpressure": "Normal",
-      "lastCheckUpDate": "08292026"
+      "lastCheckUpDate": "08292026",
+      "medication": "test1"
     },
     "recommendedTreatment": {
       "treatment": "Chemical Peel – Salicylic Acid"
