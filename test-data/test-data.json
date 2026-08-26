@@ -79,11 +79,16 @@
     },
     "treatmentPlan": {
       "firstName": "TestPlan",
-      "description":"testDescription",
-      "firstTreatment":"Chemical Peel – Salicylic Acid",
+      "description": "testDescription",
+      "firstTreatment": "Chemical Peel – Salicylic Acid",
       "tooth": "test",
       "Notes": "test",
       "secondTreatment": "Chemical Peel – Salicylic Acid - 4 Sessions - 10% Discount"
     }
+  },
+  "Appointments": {
+    "bookAppointment": {
+      "department": "Hair"
+    }
   }
-}
+  }

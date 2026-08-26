@@ -3,6 +3,7 @@ import { test } from "../fixtures/testfixtures";
 import { AppointmentsPage } from "../pages/AppointmentsPage";
 import { LoginPage } from "../pages/LoginPage";
 import { ConfigManager } from "../utils/ConfigManager";
+import testData from "../test-data/test-data.json"
 
 test.describe("Appointments Page", () => {
     test.beforeEach(async ({ page }) => {
@@ -20,11 +21,22 @@ test.describe("Appointments Page", () => {
             await appointmentsPage.clickBookAppointmentButton();
             await appointmentsPage.expectToBeVisible(appointmentsPage.bookAppointmentHeading);
         })
+        for (const clinic of testData.dashboard.clinics) {
+            await test.step(`Select clinic: ${clinic}`, async () => {
+                await appointmentsPage.clickClinicsDropdown();
+                await appointmentsPage.selectClinic(clinic);
+                await appointmentsPage.expectToBeVisible(appointmentsPage.clinicSwitchMessage)
+            });
+        }
+
 
         await test.step("Fill all Book Appointment Form Fields and Save", async () => {
             await appointmentsPage.searchPatientField(createpatient.firstName);
             await appointmentsPage.selectPatientByMrn(createpatient.Mrn);
+         //   await appointmentsPage.
         })
-    })
 
+
+
+    })
 })
