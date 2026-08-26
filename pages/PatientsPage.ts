@@ -110,6 +110,8 @@ export class PatientsPage extends BasePage {
     readonly yesCancelPlan: Locator;
     readonly nextButton: Locator;
     readonly pageNumber: Locator;
+    readonly medicationDetails : Locator;
+    readonly currentlyMedicationCheckBox : Locator
 
 
 
@@ -224,6 +226,8 @@ export class PatientsPage extends BasePage {
         this.yesCancelPlan = page.getByRole('button', { name: 'Yes, Cancel Plan' })
         this.nextButton = page.getByRole('button', { name: 'Next' })
         this.pageNumber = page.getByText(/^Page \d+ of \d+$/);
+        this.medicationDetails = page.getByRole('textbox', { name: 'Medications Details' })
+        this.currentlyMedicationCheckBox = page.getByLabel('Currently on medications')
 
     }
 
@@ -503,11 +507,16 @@ export class PatientsPage extends BasePage {
     }
 
     async clickNextButton() {
-        await this.nextButton.click();
+        await this.click(this.nextButton);
     }
 
     async getPageNumberText(): Promise<string> {
         return (await this.pageNumber.textContent()) ?? '';
     }
-
+    async enterMedicationDetails(medication: string){
+        await this.fill(this.medicationDetails,medication);
+    }
+    async clickCurrentlyMedicationCheckBox(){
+        await this.click(this.currentlyMedicationCheckBox)
+    }
 }
