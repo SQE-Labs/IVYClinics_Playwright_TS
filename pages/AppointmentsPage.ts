@@ -31,4 +31,8 @@ export class AppointmentsPage extends BasePage{
         await this.fill(this.patientSearchField, searchText)
     }
 
+    async selectPatientByMrn(mrn: string) {
+        await this.click(this.page.getByText(mrn, {exact: true}));
+    }
+
 }

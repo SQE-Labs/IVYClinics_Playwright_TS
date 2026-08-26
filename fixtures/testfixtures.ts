@@ -1,7 +1,6 @@
 import { test as base, expect } from "@playwright/test";
 import { PatientsPage } from "../pages/PatientsPage";
 import { AppointmentsPage } from "../pages/AppointmentsPage";
-import { ConfigManager } from "../utils/ConfigManager";
 import { utils } from "../utils/Utility";
 import testData from "../test-data/test-data.json";
 
@@ -54,24 +53,7 @@ export const test = base.extend<MyFixtures>({
             Mrn
         });
     },
-
-    // appointmentsPage: async ({ page }, use) => {
-
-    //     const loginPage = new LoginPage(page);
-
-    //     await loginPage.goto();
-
-    //     const credentials = ConfigManager.getCredentials();
-
-    //     await loginPage.login(
-    //         credentials.email,
-    //         credentials.password
-    //     );
-
-    //     const appointmentsPage = new AppointmentsPage(page);
-
-    //     await use(appointmentsPage);
-    // }
+    
 });
 
 export { expect };
