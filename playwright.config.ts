@@ -32,11 +32,11 @@ export default defineConfig({
 
     baseURL: envConfig.baseUrl,
 
-    trace: "on-first-retry",
+    trace: "on",
 
-    screenshot: "only-on-failure",
+    screenshot: "on",
 
-    video: "retain-on-failure",
+    video: "on",
 
     actionTimeout: 10000,
 

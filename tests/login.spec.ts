@@ -21,8 +21,6 @@ test.describe("Login", () => {
       });
 
       await test.step("Login", async () => {
-        console.log(`ENV: ${process.env.ENV}`);
-        console.log(`USER_TYPE: ${process.env.USER_TYPE}`);
         await loginPage.login(credentials.email, credentials.password);
       });
 
