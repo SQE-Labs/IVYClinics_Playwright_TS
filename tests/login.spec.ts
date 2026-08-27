@@ -21,6 +21,10 @@ test.describe("Login", () => {
       });
 
       await test.step("Login", async () => {
+        //console.log(`ENV: ${process.env.ENV}`);
+        //console.log(`USER_TYPE: ${process.env.USER_TYPE}`);
+        console.log(`ENV: UAT`);
+        console.log(`USER_TYPE: Automation`);
         await loginPage.login(credentials.email, credentials.password);
       });
 
