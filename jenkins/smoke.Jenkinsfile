@@ -59,6 +59,7 @@ pipeline {
                   wait: true,
                   propagate: true
         }
+        
         failure {
 
             echo '========================================='
