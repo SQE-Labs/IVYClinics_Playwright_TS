@@ -89,7 +89,9 @@
   },
   "Appointments": {
     "bookAppointment": {
-      "department": "Hair"
+      "department": "Skin",
+      "doctor": "Dr. Amit Sharma",
+      "AllDoctor":"Dr. Amit Sharma"
     }
   }
-  }
+}

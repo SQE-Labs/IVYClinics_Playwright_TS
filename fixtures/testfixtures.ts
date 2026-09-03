@@ -4,6 +4,7 @@ import { AppointmentsPage } from "../pages/AppointmentsPage";
 import { utils } from "../utils/Utility";
 import testData from "../test-data/test-data.json";
 
+
 type MyFixtures = {
     patientsPage: PatientsPage;
     createpatient: {
