@@ -110,8 +110,8 @@ export class PatientsPage extends BasePage {
     readonly yesCancelPlan: Locator;
     readonly nextButton: Locator;
     readonly pageNumber: Locator;
-    readonly medicationDetails : Locator;
-    readonly currentlyMedicationCheckBox : Locator
+    readonly medicationDetails: Locator;
+    readonly currentlyMedicationCheckBox: Locator
 
 
 
@@ -498,7 +498,7 @@ export class PatientsPage extends BasePage {
     async clickyesCancelPlan() {
         await this.click(this.yesCancelPlan)
     }
-    
+
     async getCurrentPageNumber(): Promise<number> {
         const text = await this.pageNumber.textContent();
         const match = text?.match(/Page (\d+) of \d+/);
@@ -513,10 +513,11 @@ export class PatientsPage extends BasePage {
     async getPageNumberText(): Promise<string> {
         return (await this.pageNumber.textContent()) ?? '';
     }
-    async enterMedicationDetails(medication: string){
-        await this.fill(this.medicationDetails,medication);
+    async enterMedicationDetails(medication: string) {
+        await this.fill(this.medicationDetails, medication);
     }
-    async clickCurrentlyMedicationCheckBox(){
+    async clickCurrentlyMedicationCheckBox() {
         await this.click(this.currentlyMedicationCheckBox)
     }
+
 }

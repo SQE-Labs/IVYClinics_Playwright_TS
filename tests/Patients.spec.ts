@@ -6,6 +6,7 @@ import { LoginPage } from "../pages/LoginPage";
 import { ConfigManager } from "../utils/ConfigManager";
 import { PatientsPage } from "../pages/PatientsPage";
 
+
 test.describe("Patients Page", () => {
     test.beforeEach(async ({ page }) => {
         const loginPage = new LoginPage(page);
@@ -158,7 +159,7 @@ test.describe("Patients Page", () => {
             new RegExp(`^Page ${currentPage + 2} of \\d+$`)
         );
     });
-    test("Verify medical history got saved and recommended treatment get saved and deleted ", async ({ page, createpatient }) => {
+    test("IVY_PAT_76,IVY_PAT_77,IVY_PAT_78,Verify medical history got saved and recommended treatment get saved and deleted ", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("add new patient and navigate to medical history tab", async () => {
             await patientsPage.clickPatientsTab();
@@ -183,7 +184,7 @@ test.describe("Patients Page", () => {
             await patientsPage.clickCurrentlyMedicationCheckBox();
             await expect(patientsPage.currentlyMedicationCheckBox).toBeChecked();
             await patientsPage.enterMedicationDetails(testData.patientprofile.medicalHistory.medication)
-            
+
             await patientsPage.clickSaveMedicalHistoryButton();
             await expect(patientsPage.successMedicalHistoryMessage).toBeVisible()
         })
