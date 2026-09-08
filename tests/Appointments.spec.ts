@@ -45,9 +45,10 @@ test.describe("Appointments Page", () => {
             await appointmentsPage.selectAllStatusDropdown(testData.Appointments.bookAppointment.AllStatus);
             await appointmentsPage.clicklistView()
             await expect(appointmentsPage.listView).toHaveClass(/active/);
+            await appointmentsPage.selectdateInputListView(appointmentDate);
             await appointmentsPage.expectToBeVisible(appointmentsPage.listViewName(createpatient.firstName))
             await appointmentsPage.clickcalenderViewButtonpage();
-            await appointmentsPage.appointmentCardByPatient(createpatient.firstName).click();
+           await appointmentsPage.clickAppointmentByPatient(createpatient.firstName)
             await appointmentsPage.expectToBeVisible(appointmentsPage.bookAnotherAppointmentButton)
             await appointmentsPage.expectToBeVisible(appointmentsPage.startVisitSection)
 
@@ -222,11 +223,8 @@ test.describe("Appointments Page", () => {
             await appointmentsPage.expectToBeVisible(appointmentsPage.appointmentBookedMessage)
             await appointmentsPage.selectAllDoctor(testData.Appointments.bookAppointment.AllDoctor);
             await appointmentsPage.selectAllStatusDropdown(testData.Appointments.bookAppointment.AllStatus);
-            await appointmentsPage.clicklistView()
-            await expect(appointmentsPage.listView).toHaveClass(/active/);
-            await appointmentsPage.expectToBeVisible(appointmentsPage.listViewName(createpatient.firstName))
             await appointmentsPage.clickcalenderViewButtonpage();
-            await appointmentsPage.clickAppointmentByPatient(createpatient.firstName);
+             await appointmentsPage.clickAppointmentByPatient(createpatient.firstName)
             await appointmentsPage.expectToBeVisible(appointmentsPage.startVisitSection)
             await test.step("start visit flow", async () => {
                 await appointmentsPage.clickAppointmentsListTab();
@@ -242,7 +240,7 @@ test.describe("Appointments Page", () => {
         })
     })
     //Negative test cases
-    test("IVY_APT_47,Verify that validation message is displayed for required fields on start visit", async ({ page, createpatient }) => {
+    test("IVY_APT_47,Verify that validation message is appears for required fields on start visit", async ({ page, createpatient }) => {
         const appointmentsPage = new AppointmentsPage(page);
         await test.step("Navigate to the Appointment Registration Page", async () => {
             await appointmentsPage.clickAppointmentsTab();
@@ -272,18 +270,15 @@ test.describe("Appointments Page", () => {
             await appointmentsPage.expectToBeVisible(appointmentsPage.appointmentBookedMessage)
             await appointmentsPage.selectAllDoctor(testData.Appointments.bookAppointment.AllDoctor);
             await appointmentsPage.selectAllStatusDropdown(testData.Appointments.bookAppointment.AllStatus);
-            await appointmentsPage.clicklistView()
-            await expect(appointmentsPage.listView).toHaveClass(/active/);
-            await appointmentsPage.expectToBeVisible(appointmentsPage.listViewName(createpatient.firstName))
             await appointmentsPage.clickcalenderViewButtonpage();
-            await appointmentsPage.clickAppointmentByPatient(createpatient.firstName);
+            await appointmentsPage.clickAppointmentByPatient(createpatient.firstName)
             await appointmentsPage.expectToBeVisible(appointmentsPage.startVisitSection)
             await test.step("start visit flow", async () => {
                 await appointmentsPage.clickAppointmentsListTab();
                 await appointmentsPage.clickStartVisitButton();
                 await appointmentsPage.clickSaveButton();
                 await expect(appointmentsPage.chiefComplaintRequiredToast).toBeVisible();
-                
+
             })
         })
     })
