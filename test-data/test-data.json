@@ -86,5 +86,11 @@
       "Notes": "test",
       "secondTreatment": "Chemical Peel – Salicylic Acid - 4 Sessions - 10% Discount"
     }
+  },
+  "benefitProgram": {
+    "instrumentType": "Wallet Coupon / Gift Card",
+    "status": "Active",
+    "description": "Automated Benefit Program",
+    "updatedDescription": "Updated Automated Benefit Program"
   }
 }

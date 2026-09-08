@@ -17,4 +17,14 @@ export class utils {
         }
         return phoneNumber
     }
+
+    static generateProgramCode(): string {
+        const randomNumber = Math.floor(1000 + Math.random() * 9000);
+        return `AUTO-${randomNumber}`;
+    }
+
+    static generateProgramName(): string {
+        const randomName = Math.floor(1000 + Math.random() * 9000);
+        return `Benefit Program ${randomName}`;
+    }
 }
