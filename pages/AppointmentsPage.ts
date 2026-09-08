@@ -40,7 +40,8 @@ export class AppointmentsPage extends BasePage {
     readonly bookAnotherAppointmentButton: Locator;
     readonly DiagnosisField: Locator;
     readonly RecommendedTreatmentField: Locator;
-
+    readonly dateInputListView: Locator;
+ 
 
 
     constructor(page: Page) {
@@ -77,10 +78,12 @@ export class AppointmentsPage extends BasePage {
         this.chiefComplaintField = page.getByRole('textbox', { name: 'Chief Complaint *' })
         this.HistoryOfPresentIllness = page.getByRole('textbox', { name: 'History of Present Illness' })
         this.successToast = page.getByRole('alert').filter({ hasText: 'Pre-treatment saved. New case created.' });
-        this.nextWeekButton = this.page.getByRole('button', { name: /next week/i });
+       // this.nextWeekButton = this.page.getByRole('button', { name: /next week/i });
+       this.nextWeekButton = page.locator('div._calendarHeader_5kjmu_125').locator('button').nth(1)
         this.bookAnotherAppointmentButton = page.getByRole('button', { name: 'Book Another' })
         this.DiagnosisField = page.getByRole('textbox', { name: 'Diagnosis *' })
         this.RecommendedTreatmentField = page.getByRole('textbox', { name: 'Recommended Treatment / Notes' })
+        this.dateInputListView = this.page.locator('input[type="date"]');
     }
 
 
@@ -212,22 +215,29 @@ export class AppointmentsPage extends BasePage {
     async fillHistoryOfPresentIllnessField(history: string) {
         await this.fill(this.HistoryOfPresentIllness, history);
     }
-    async clickAppointmentByPatient(patientName: string, maxWeeks = 12) {
-        for (let i = 0; i < maxWeeks; i++) {
-            const appointment = this.appointmentCardByPatient(patientName);
-            if (await appointment.count() > 0) {
-                await appointment.first().click();
-                return;
-            }
-            await this.nextWeekButton.click();
+   async clickAppointmentByPatient(patientName: string, maxWeeks = 12) {
+    for (let i = 0; i < maxWeeks; i++) {
+        const appointment = this.appointmentCardByPatient(patientName);
+        await this.page.waitForTimeout(1000);
+        const count = await appointment.count();
+        console.log(`Week ${i + 1}: ${patientName} - Found: ${count}`);
+        if (count > 0) {
+            await appointment.first().click();
+            return;
         }
-        throw new Error(`Appointment for "${patientName}" not found`);
+        await this.nextWeekButton.click();
+        await this.page.waitForTimeout(1000);
     }
+    throw new Error(`Appointment for "${patientName}" not found`);
+}
     async fillDiagnosisField(diagnosis: string) {
         await this.fill(this.DiagnosisField, diagnosis);
     }
     async fillRecommendedTreatmentField(treatment: string) {
         await this.fill(this.RecommendedTreatmentField, treatment);
+    }
+   async selectdateInputListView(date: string) {
+        await this.fill(this.dateInputListView, date);
     }
 
 }
