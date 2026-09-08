@@ -22,6 +22,10 @@
       "email": "bWFuYWdlckBkZW1vLmNvbQ==",
       "password": "bWFuYWdlcjEyMw=="
     },
+    "doctor": {
+      "email": "YW5zaC50ZXN0ZXJAeW9wbWFpbC5jb20",
+      "password": "ZGVtbzEyMzQ"
+    },
     "customer": {
       "email": "Y3VzdG9tZXJAZGVtby5jb20=",
       "password": "Y3VzdG9tZXIxMjM="
@@ -46,6 +50,8 @@
     "Address": "test1,POtest,po,TEst",
     "reason": "iam sick",
     "howDidYouHearAboutUs": "Instagram",
+    "howDidYouHearAboutUs2": "Other",
+    "pleaseSpecify": "TestPleaseSpecify",
     "companyName": "Test IVY",
     "employeeID": "123ID",
     "priceGroup": "Consultation (DENTAL)",
@@ -54,8 +60,11 @@
     "contactName": "testName",
     "relationship": "Spouse",
     "phoneBleongsto": "Self (the patient)",
+    "phoneBleongsto2": "Child",
+    "phoneHolderName": "Test Phone Holder",
     "phoneNumbertest1": "12345",
     "phoneNumbertest2": "1234567890",
+    "contactPhoneTest": "test",
     "phoneBleongsToFieldpopup": "Self (the patient)",
     "firstNameTest1": "12334",
     "firstNameTest2": "Test 100 Charachter validation nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
@@ -91,7 +100,14 @@
     "bookAppointment": {
       "department": "Skin",
       "doctor": "Dr. Amit Sharma",
-      "AllDoctor":"Dr. Amit Sharma"
+      "AllDoctor": "Dr. Amit Sharma",
+      "AllStatus": "SCHEDULED"
+    },
+    "startvisit": {
+      "complaint": "Test1",
+      "historyIllness": "Test2",
+      "diagnosis": "Test3",
+      "recommendedTreatmentNotes": "Test4"
     }
   }
 }
