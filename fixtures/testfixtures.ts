@@ -1,7 +1,9 @@
 import { test as base, expect } from "@playwright/test";
 import { PatientsPage } from "../pages/PatientsPage";
+import { AppointmentsPage } from "../pages/AppointmentsPage";
 import { utils } from "../utils/Utility";
 import testData from "../test-data/test-data.json";
+
 
 type MyFixtures = {
     patientsPage: PatientsPage;
@@ -12,6 +14,7 @@ type MyFixtures = {
         howDidYouHearAboutUs: string;
         Mrn: string
     };
+    appointmentsPage: AppointmentsPage;
 };
 
 
@@ -51,6 +54,7 @@ export const test = base.extend<MyFixtures>({
             Mrn
         });
     },
+    
 });
 
 export { expect };
