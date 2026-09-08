@@ -112,6 +112,12 @@ export class PatientsPage extends BasePage {
     readonly pageNumber: Locator;
     readonly medicationDetails: Locator;
     readonly currentlyMedicationCheckBox: Locator
+    readonly pleaseSpecifyField: Locator
+    readonly PhoneHolderName: Locator
+    readonly contactPhoneError: Locator
+    readonly previousButton: Locator;
+    readonly formCancelButton: Locator;
+    readonly noCancelButton: Locator;
 
 
 
@@ -228,6 +234,12 @@ export class PatientsPage extends BasePage {
         this.pageNumber = page.getByText(/^Page \d+ of \d+$/);
         this.medicationDetails = page.getByRole('textbox', { name: 'Medications Details' })
         this.currentlyMedicationCheckBox = page.getByLabel('Currently on medications')
+        this.pleaseSpecifyField = page.getByText('Please specify*')
+        this.PhoneHolderName = page.getByRole('textbox', { name: 'Phone holder name' })
+        this.contactPhoneError = page.locator('#contact-phone-error')
+        this.previousButton = page.getByRole('button', { name: 'Previous' })
+        this.formCancelButton = page.getByRole('button', { name: 'Cancel' })
+        this.noCancelButton = page.getByRole('button', { name: 'No, Cancel' })
 
     }
 
@@ -505,6 +517,9 @@ export class PatientsPage extends BasePage {
 
         return Number(match?.[1]);
     }
+    async clickPreviousButton(): Promise<void> {
+    await this.previousButton.click();
+}
 
     async clickNextButton() {
         await this.click(this.nextButton);
@@ -518,6 +533,18 @@ export class PatientsPage extends BasePage {
     }
     async clickCurrentlyMedicationCheckBox() {
         await this.click(this.currentlyMedicationCheckBox)
+    }
+    async enterPleaseSpecifyFieldText(specify: string) {
+        await this.fill(this.pleaseSpecifyField, specify)
+    }
+    async enterPhoneHolderName(phoneHolderName: string) {
+        await this.fill(this.PhoneHolderName, phoneHolderName);
+    }
+    async clickFormCancelButton() {
+        await this.click(this.formCancelButton);
+    }
+    async clickNoCancelButton() {
+        await this.click(this.noCancelButton);
     }
 
 }

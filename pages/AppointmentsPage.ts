@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page, } from "@playwright/test";
 import { BasePage } from "../base/BasePage"
 import { utils } from "../utils/Utility";
 
@@ -24,6 +24,23 @@ export class AppointmentsPage extends BasePage {
     readonly startVisitSection: Locator;
     readonly allDoctorDropdown: Locator;
     readonly listViewName: Function;
+    readonly allStatusDropdown: Locator;
+    readonly rescheduleButton: Locator;
+    readonly appointmentRescheduledToast: Locator;
+    readonly appointmentList: Function;
+    readonly appointmentsListTab: Locator;
+    readonly rescheduleAppointmentButton: Locator;
+    readonly startVisitButton: Locator;
+    readonly saveButton: Locator;
+    readonly chiefComplaintRequiredToast: Locator;
+    readonly chiefComplaintField: Locator;
+    readonly HistoryOfPresentIllness: Locator;
+    readonly successToast: Locator;
+    readonly nextWeekButton: Locator;
+    readonly bookAnotherAppointmentButton: Locator;
+    readonly DiagnosisField: Locator;
+    readonly RecommendedTreatmentField: Locator;
+
 
 
     constructor(page: Page) {
@@ -46,10 +63,24 @@ export class AppointmentsPage extends BasePage {
         this.listView = page.getByRole('button', { name: 'List' })
         this.calenderViewButtonpage = page.getByRole('button', { name: 'Calendar' })
         this.startVisitSection = page.locator('strong').filter({ hasText: 'Ready to Start Visit' })
-        this.allDoctorDropdown = page.locator('select').filter({
-            has: page.locator('option', { hasText: 'All Doctors' })
-        });
+        this.allDoctorDropdown = page.locator('select').filter({ has: page.locator('option', { hasText: 'All Doctors' }) });
         this.listViewName = (name: string) => this.page.locator('tbody tr').filter({ hasText: name }).getByText(name);
+        this.allStatusDropdown = page.locator('select').filter({ has: page.locator('option', { hasText: 'All Status' }) });
+        this.rescheduleButton = page.getByRole('button', { name: 'Reschedule' })
+        this.appointmentRescheduledToast = this.page.getByRole('alert').filter({ hasText: 'Appointment Rescheduled' });
+        this.appointmentList = (date: string) => page.locator('td').filter({ hasText: date });
+        this.appointmentsListTab = page.getByRole('button', { name: 'Appointments' })
+        this.rescheduleAppointmentButton = page.getByRole('button', { name: 'Reschedule' })
+        this.startVisitButton = page.getByRole('button', { name: 'Start Visit' }).first()
+        this.saveButton = page.getByRole('button', { name: 'Save' })
+        this.chiefComplaintRequiredToast = page.getByRole('alert').filter({ hasText: 'Chief Complaint is required to save.' });
+        this.chiefComplaintField = page.getByRole('textbox', { name: 'Chief Complaint *' })
+        this.HistoryOfPresentIllness = page.getByRole('textbox', { name: 'History of Present Illness' })
+        this.successToast = page.getByRole('alert').filter({ hasText: 'Pre-treatment saved. New case created.' });
+        this.nextWeekButton = this.page.getByRole('button', { name: /next week/i });
+        this.bookAnotherAppointmentButton = page.getByRole('button', { name: 'Book Another' })
+        this.DiagnosisField = page.getByRole('textbox', { name: 'Diagnosis *' })
+        this.RecommendedTreatmentField = page.getByRole('textbox', { name: 'Recommended Treatment / Notes' })
     }
 
 
@@ -139,8 +170,6 @@ export class AppointmentsPage extends BasePage {
             label: doctorName
         });
     }
-
-    // Check if a specific time slot is disabled
     async isTimeSlotDisabled(timeSlot: string): Promise<boolean> {
         const options = this.startTimeDropdown.locator('option');
         const count = await options.count();
@@ -158,6 +187,47 @@ export class AppointmentsPage extends BasePage {
             hasText: timeSlot
         });
         return await option.count() > 0;
+    }
+    async selectAllStatusDropdown(status: string) {
+        await this.allStatusDropdown.selectOption(status)
+    }
+    async clickRescheduleButton() {
+        await this.click(this.rescheduleButton);
+    }
+    async clickAppointmentsListTab() {
+        await this.click(this.appointmentsListTab);
+    }
+    async clickRescheduleAppointmentButton() {
+        await this.click(this.rescheduleAppointmentButton);
+    }
+    async clickStartVisitButton() {
+        await this.click(this.startVisitButton);
+    }
+    async clickSaveButton() {
+        await this.click(this.saveButton);
+    }
+    async fillChiefComplaintField(complaint: string) {
+        await this.fill(this.chiefComplaintField, complaint);
+    }
+    async fillHistoryOfPresentIllnessField(history: string) {
+        await this.fill(this.HistoryOfPresentIllness, history);
+    }
+    async clickAppointmentByPatient(patientName: string, maxWeeks = 12) {
+        for (let i = 0; i < maxWeeks; i++) {
+            const appointment = this.appointmentCardByPatient(patientName);
+            if (await appointment.count() > 0) {
+                await appointment.first().click();
+                return;
+            }
+            await this.nextWeekButton.click();
+        }
+        throw new Error(`Appointment for "${patientName}" not found`);
+    }
+    async fillDiagnosisField(diagnosis: string) {
+        await this.fill(this.DiagnosisField, diagnosis);
+    }
+    async fillRecommendedTreatmentField(treatment: string) {
+        await this.fill(this.RecommendedTreatmentField, treatment);
     }
 
 }

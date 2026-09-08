@@ -12,7 +12,7 @@ $env:ENV="uat"
 npm run test:owner -- --project=chromium --workers=1
 //Manager
 $env:ENV="uat"
-npm run test:manager -- --project=chromium --workers=1
+npm run test:doctor -- --project=chromium --workers=1
 //Customer
 $env:ENV="qa"
 npm run test:customer -- --project=chromium --workers=1

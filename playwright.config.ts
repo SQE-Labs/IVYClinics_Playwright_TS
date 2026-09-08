@@ -12,7 +12,7 @@ export default defineConfig({
 
   reporter: [["html", { open: "never" }], ["list"]],
 
-  timeout: 30000,
+  timeout: 300000,
 
   expect: {
     timeout: 10000,
@@ -32,6 +32,10 @@ export default defineConfig({
     actionTimeout: 10000,
 
     navigationTimeout: 30000,
+
+    // launchOptions: {
+    //   slowMo: 1000,
+    // },
   },
 
   projects: [

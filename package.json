@@ -8,7 +8,8 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:login": "playwright test tests/login.spec.ts",
-    "test:owner": "cross-env USER_TYPE=owner playwright test",
+    "test:doctor": "cross-env USER_TYPE=doctor playwright test",
+     "test:owner": "cross-env USER_TYPE=owner playwright test",
     "test:manager": "cross-env USER_TYPE=manager playwright test",
     "test:customer": "cross-env USER_TYPE=customer playwright test",
     "test:chromium": "playwright test --project=chromium",
@@ -34,7 +35,7 @@
   },
   "homepage": "https://github.com/SQE-Labs/IVYClinics_Playwright_TS#readme",
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^26.0.0",
     "cross-env": "^10.1.0",
     "typescript": "^5.8.3"
