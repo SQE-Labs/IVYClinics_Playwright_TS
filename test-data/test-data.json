@@ -109,5 +109,11 @@
       "diagnosis": "Test3",
       "recommendedTreatmentNotes": "Test4"
     }
+  },
+  "benefitProgram": {
+    "instrumentType": "Wallet Coupon / Gift Card",
+    "status": "Active",
+    "description": "Automated Benefit Program",
+    "updatedDescription": "Updated Automated Benefit Program"
   }
 }
