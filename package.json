@@ -10,7 +10,7 @@
     "test:login": "playwright test tests/login.spec.ts",
     "test:doctor": "cross-env USER_TYPE=doctor playwright test",
      "test:owner": "cross-env USER_TYPE=owner playwright test",
-    "test:manager": "cross-env USER_TYPE=manager playwright test",
+    "test:receptionist": "cross-env USER_TYPE=receptionist playwright test",
     "test:customer": "cross-env USER_TYPE=customer playwright test",
     "test:chromium": "playwright test --project=chromium",
     "test:debug": "playwright test --debug",
