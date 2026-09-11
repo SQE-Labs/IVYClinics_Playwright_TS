@@ -23,12 +23,12 @@
       "password": "bWFuYWdlcjEyMw=="
     },
     "doctor": {
-      "email": "YW5zaC50ZXN0ZXJAeW9wbWFpbC5jb20",
+      "email": "ZG9jdG9yQGRlbW8uY29t",
       "password": "ZGVtbzEyMzQ"
     },
-    "customer": {
-      "email": "Y3VzdG9tZXJAZGVtby5jb20=",
-      "password": "Y3VzdG9tZXIxMjM="
+    "receptionist": {
+      "email": "cmVjZXB0aW9uaXN0QGRlbW8uY29t",
+      "password": "ZGVtbzEyMzQ"
     }
   },
   "dashboard": {
@@ -40,6 +40,7 @@
     "email": "Test@gmail.com",
     "email2": "Test2@gmail.com",
     "date": "07022026",
+    "date2": "07022070",
     "gender": "Male",
     "gender2": "Female",
     "LastName": "Test",

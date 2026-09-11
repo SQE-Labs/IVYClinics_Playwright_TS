@@ -33,16 +33,21 @@ export default defineConfig({
 
     navigationTimeout: 30000,
 
+
     // launchOptions: {
     //   slowMo: 1500,
     // },
   },
 
   projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+     {
+      name: "setup",
+      testMatch: /.*\.setup\.ts/,
     },
+    // {
+    //   name: "chromium",
+    //   use: { ...devices["Desktop Chrome"] },
+    // },
     // {
     //   name: "firefox",
     //   use: { ...devices["Desktop Firefox"] },
@@ -51,5 +56,13 @@ export default defineConfig({
     //   name: "webkit",
     //   use: { ...devices["Desktop Safari"] },
     // },
+    {
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "auth/user.json",
+      },
+      dependencies: ["setup"],
+    }
   ],
 });

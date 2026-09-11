@@ -54,7 +54,7 @@ export class BasePage {
   }
 
   // Asserts that an element is visible — test FAILS if it is not found
-  async expectToBeVisible(locator: Locator) {
-    await expect(locator).toBeVisible();
-  }
+  async expectToBeVisible(locator: Locator, message?: string) {
+    await expect(locator, message).toBeVisible();
+}
 }

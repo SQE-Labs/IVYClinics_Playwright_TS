@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { DashboardPage } from '../pages/DashboardPage';
-import { LoginPage } from '../pages/LoginPage';
-import { ConfigManager } from '../utils/ConfigManager';
 import testData from "../test-data/test-data.json"
 
 
@@ -9,10 +7,7 @@ import testData from "../test-data/test-data.json"
 test.describe("Dashboard page", () => {
 
     test.beforeEach(async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        await loginPage.goto();
-        const credentials = ConfigManager.getCredentials();
-        await loginPage.login(credentials.email, credentials.password);
+        await page.goto("/dashboard");
 
     })
     test("IVY_Dash_1, IVY_Dash_2, IVY_Dash_3, IVY_Dash_4, IVY_Dash_5, IVY_Dash_6, Verify all dashboard tiles are displayed and function correctly", async ({ page }) => {
@@ -52,7 +47,7 @@ test.describe("Dashboard page", () => {
                 await dashboardPage.clickClinicsDropdown();
                 await dashboardPage.selectClinic(clinic);
                 const expectedWelcomeText = `Welcome to ${clinic}. Here's what you can do today.`;
-                await expect(dashboardPage.welcomeText).toHaveText(expectedWelcomeText);
+                await expect(dashboardPage.welcomeText, `Expected the dashboard welcome message to show the selected clinic and the expected greeting text for ${clinic}.`).toHaveText(expectedWelcomeText);
             });
         }
 
