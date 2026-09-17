@@ -10,7 +10,7 @@ test.describe("Patients Page", () => {
          await page.goto("/patients");
     })
     //positive test cases
-    test(" @doctor,IVY_PAT_1, IVY_PAT_11, IVY_PAT_12,IVY_PAT_11,IVY_PAT_24,IVY_PAT_26,IVY_PAT_29,IVY_PAT_31,IVY_PAT_34,IVY_PAT_36,IVY_PAT_40,IVY_PAT_61,IVY_PAT_39,IVY_PAT_44,IVY_PAT_45,IVY_PAT_47,IVY_PAT_49 - Verify that a user can create a patient and validate details  ", async ({ page }) => {
+    test(" @doctor, @receptionist,IVY_PAT_1, IVY_PAT_11, IVY_PAT_12,IVY_PAT_11,IVY_PAT_24,IVY_PAT_26,IVY_PAT_29,IVY_PAT_31,IVY_PAT_34,IVY_PAT_36,IVY_PAT_40,IVY_PAT_61,IVY_PAT_39,IVY_PAT_44,IVY_PAT_45,IVY_PAT_47,IVY_PAT_49 - Verify that a user can create a patient and validate details  ", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to the Patient Registration page", async () => {
             await patientsPage.clickPatientsTab();
@@ -53,7 +53,7 @@ test.describe("Patients Page", () => {
         })
     }) 
     // Negative test case
-    test("@doctor, Verify DOB does not accept future date  ", async ({ page }) => {
+    test("@doctor,@receptionist, Verify DOB does not accept future date  ", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to the Patient Registration page", async () => {
             await patientsPage.clickPatientsTab();
@@ -75,7 +75,7 @@ test.describe("Patients Page", () => {
         })
     })
     //positive test cases
-    test("@doctor, IVY_PAT_37,IVY_PAT_38,IVY_PAT_42,IVY_PAT_43,IVY_PAT_48,IVY_PAT_50,IVY_PAT_57,IVY_PAT_59,IVY_PAT_14-Verify that additional fields are unlocked and appeared on the 'Registration' form, when the user selects the howYouKnowUs field and Phone belongs to and checkbox can be deselect", async ({ page }) => {
+    test("@doctor,@receptionist IVY_PAT_37,IVY_PAT_38,IVY_PAT_42,IVY_PAT_43,IVY_PAT_48,IVY_PAT_50,IVY_PAT_57,IVY_PAT_59,IVY_PAT_14-Verify that additional fields are unlocked and appeared on the 'Registration' form, when the user selects the howYouKnowUs field and Phone belongs to and checkbox can be deselect", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to the Patient Registration page", async () => {
             await patientsPage.clickPatientsTab();
@@ -119,7 +119,7 @@ test.describe("Patients Page", () => {
         })
     })
     //positive test cases
-    test("@doctor,IVY_PAT_2,IVY_PAT_5,IVY_PAT_62,IVY_PAT_9,search saved patient and verify view,book appointment button redirected to corresponding page.", async ({ page, createpatient }) => {
+    test("@doctor,@receptionist,IVY_PAT_2,IVY_PAT_5,IVY_PAT_62,IVY_PAT_9,search saved patient and verify view,book appointment button redirected to corresponding page.", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
         await test.step(" search and Navigate to patient profile page ", async () => {
             await patientsPage.clickPatientsTab();
@@ -135,7 +135,7 @@ test.describe("Patients Page", () => {
         })
     })
     //positive test cases
-    test("@doctor, IVY_PAT_63,Verify user can edit and update form details successfully.", async ({ page, createpatient }) => {
+    test("@doctor,@receptionist, IVY_PAT_63,Verify user can edit and update form details successfully.", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to the patient profile and open the Edit form", async () => {
             await patientsPage.clickPatientsTab();
@@ -152,7 +152,7 @@ test.describe("Patients Page", () => {
         })
     })
     //Negative test cases
-    test("@doctor,IVY_PAT_13,IVY_PAT_16,IVY_PAT_17, IVY_PAT_23,IVY_PAT_46 Verify validation message is displayed on registration form and Verify Book appointment page Appears ", async ({ page }) => {
+    test("@doctor,@receptionist,IVY_PAT_13,IVY_PAT_16,IVY_PAT_17, IVY_PAT_23,IVY_PAT_46 Verify validation message is displayed on registration form and Verify Book appointment page Appears ", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to patient registration page", async () => {
             await patientsPage.clickPatientsTab();
@@ -193,7 +193,7 @@ test.describe("Patients Page", () => {
     })
 
     //Negative test cases
-    test("@doctor,IVY_PAT_20,IVY_PAT_21,Verify the Family Sharing flow with an existing phone number and Validation message appears ", async ({ page, createpatient }) => {
+    test("@doctor,@receptionist,IVY_PAT_20,IVY_PAT_21,Verify the Family Sharing flow with an existing phone number and Validation message appears ", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to patient registration page", async () => {
             await patientsPage.clickPatientsTab();
@@ -237,7 +237,7 @@ test.describe("Patients Page", () => {
         })
     })
     //Positive test cases
-    test("@doctor,IVY_PAT_3,IVY_PAT_4,IVY_PAT_76 Verify clicking next and previous button navigates between pages", async ({ page }) => {
+    test("@doctor,@receptionist,IVY_PAT_3,IVY_PAT_4,IVY_PAT_76 Verify clicking next and previous button navigates between pages", async ({ page }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to patient profile page", async () => {
             await patientsPage.clickPatientsTab();
@@ -296,6 +296,7 @@ test.describe("Patients Page", () => {
             await expect(patientsPage.successMessageTreatmentUpdate, "Expected the recommended treatments update success message to appear after saving the treatment selection.").toContainText("Recommended treatments updated.");
         })
     })
+     
     //negative test cases
     test("@doctor,IVY_PAT_85,IVY_PAT_86,IVY_PAT_87,verify save button is disable when  Recommended treatment is empty and verify user can add 2 treatment and delete also   ", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
@@ -318,7 +319,7 @@ test.describe("Patients Page", () => {
         })
     })
     //positive test cases
-    test("@doctor,IVY_PAT_79,IVY_PAT_78,IVY_PAT_80-Verify that users can upload investigation files, sort the files correctly, and delete the uploaded files successfully.", async ({ page, createpatient }) => {
+    test("@doctor,@receptionist,IVY_PAT_79,IVY_PAT_78,IVY_PAT_80-Verify that users can upload investigation files, sort the files correctly, and delete the uploaded files successfully.", async ({ page, createpatient }) => {
         const patientsPage = new PatientsPage(page);
         await test.step("Navigate to the patient profile and open the Investigations tab", async () => {
             await patientsPage.clickPatientsTab();
