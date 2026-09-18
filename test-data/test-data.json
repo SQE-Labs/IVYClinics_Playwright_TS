@@ -100,15 +100,31 @@
   "Appointments": {
     "bookAppointment": {
       "department": "Skin",
-      "doctor": "Dr. Amit Sharma",
-      "AllDoctor": "Dr. Amit Sharma",
+      "doctor": "Amit Sharma",
+      "AllDoctor": "Amit Sharma",
       "AllStatus": "SCHEDULED"
     },
     "startvisit": {
       "complaint": "Test1",
       "historyIllness": "Test2",
       "diagnosis": "Test3",
-      "recommendedTreatmentNotes": "Test4"
+      "recommendedTreatmentNotes": "Test4",
+      "FollowUpDate": "14122030",
+      "FollowUpNote": "test"
+    },
+    "Prescription": {
+      "searchMedicine": "para",
+      "selectMedicine": "Adephil Moisturizing Cream (",
+      "searchSecondMedicine": "para",
+      "selectSecondMedicine": "Calpol 250mg/5ml (Paracetamol"
+
+    },
+    "createbill(pricing)": {
+      "RateCard": "XYZ",
+      "BillDiscount": "FLat 500 (₹800.00)",
+      "DiscountReason": "Group company employee",
+      "Employeename/ID": "123ID"
+
     }
   },
   "benefitProgram": {
@@ -117,5 +133,15 @@
     "inactiveStatus": "Inactive",
     "description": "Automated Benefit Program",
     "updatedDescription": "Updated Automated Benefit Program"
-  }
+  },
+  "benefitLot": {
+    "program": "1133 (@@@)",
+    "lotCode": "LOT-A-2026",
+    "lotName": "Diwali 2026 Wallets",
+    "walletValue": "5000",
+    "expiryDate": "2026-09-30",
+    "discountTaxMode": "Before Tax (default)",
+    "codeGenerationMode": "System Auto-Generated",
+    "notes": "Automation test"
+}
 }

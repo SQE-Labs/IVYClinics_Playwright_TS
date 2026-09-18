@@ -11,13 +11,13 @@ Added following script in the package.json file for future muiltiple user types,
 //Use following command to run the test:
 //Owner
 $env:ENV="uat"
-npm run test:owner -- --project=chromium --workers=1q
+npm run test:owner -- --project=chromium --workers=1
 //doctor
 $env:ENV="uat"
 npm run test:doctor -- --project=chromium --workers=1
 //receptionist
 $env:ENV="uat"
-npm run test:receptionist -- --project=chromium --workers=1
+
 
 You can also make it even cleaner:
 Update the script to following:
