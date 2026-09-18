@@ -11,3 +11,4 @@ node_modules/
 # Environment overrides (credentials should not be committed)
 .env
 .env.local
+auth/user.json

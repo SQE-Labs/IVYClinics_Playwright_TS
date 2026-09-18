@@ -62,6 +62,87 @@ test.describe("Appointments Page", () => {
             })
         })
     })
+    test("@receptionist-Verify that the receptionist is able to successfully book an appointment for a patient and reshedule it", async ({ page, createpatient }) => {
+        const appointmentsPage = new AppointmentsPage(page);
+        await test.step("Navigate to the Appointment Registration Page", async () => {
+            await appointmentsPage.clickAppointmentsTab();
+            await appointmentsPage.clickBookAppointmentButton();
+            await appointmentsPage.expectToBeVisible(appointmentsPage.bookAppointmentHeading);
+        })
+        for (const clinic of testData.dashboard.clinics) {
+            await test.step(`Select clinic: ${clinic}`, async () => {
+                await appointmentsPage.clickClinicsDropdown();
+                await appointmentsPage.selectClinic(clinic);
+                await appointmentsPage.expectToBeVisible(appointmentsPage.clinicSwitchMessage)
+            });
+        }
+        await test.step("Fill all Book Appointment Form Fields and Save", async () => {
+            await appointmentsPage.searchPatientField(createpatient.firstName);
+            await appointmentsPage.selectPatientByMrn(createpatient.Mrn);
+            await appointmentsPage.selectDepartmentDropdown(testData.Appointments.bookAppointment.department);
+            await appointmentsPage.selectDoctorDropdown(testData.Appointments.bookAppointment.doctor)
+            const appointment = await appointmentsPage.selectNextAppointment();
+            const appointmentDate = appointment.date;
+            const appointmentTime = appointment.time;
+            console.log(`Appointment Date: ${appointmentDate}`);
+            console.log(`Appointment Time: ${appointmentTime}`);
+            expect(appointmentDate, "Expected the selected appointment date to be captured before creating the appointment.").toBeTruthy();
+            expect(appointmentTime, "Expected the selected appointment time to be captured before creating the appointment.").toBeTruthy();
+            await appointmentsPage.clickCreateAppointmentButton();
+            await appointmentsPage.expectToBeVisible(appointmentsPage.appointmentBookedMessage)
+            await appointmentsPage.selectAllDoctor(testData.Appointments.bookAppointment.AllDoctor);
+            await appointmentsPage.selectAllStatusDropdown(testData.Appointments.bookAppointment.AllStatus);
+            await appointmentsPage.clicklistView()
+            await expect(appointmentsPage.listView, "Expected the list view toggle to become active after selecting it for appointment results.").toHaveClass(/active/);
+            await appointmentsPage.selectdateInputListView(appointmentDate);
+            await appointmentsPage.expectToBeVisible(appointmentsPage.listViewName(createpatient.firstName))
+            await appointmentsPage.clickcalenderViewButtonpage();
+            await appointmentsPage.clickAppointmentByPatient(createpatient.firstName)
+            await appointmentsPage.expectToBeVisible(appointmentsPage.bookAnotherAppointmentButton)
+
+            await test.step("Reschedule the booked appointment by selecting a new date and time.", async () => {
+                await appointmentsPage.clickAppointmentsListTab();
+                await appointmentsPage.clickRescheduleButton();
+                await appointmentsPage.selectDepartmentDropdown(testData.Appointments.bookAppointment.department);
+                await appointmentsPage.selectDoctorDropdown(testData.Appointments.bookAppointment.doctor)
+                const appointment = await appointmentsPage.selectNextAppointment();
+                const appointmentDate = appointment.date;
+                const appointmentTime = appointment.time;
+                expect(appointmentDate, "Expected the rescheduled appointment date to be selected before saving the reschedule.").toBeTruthy();
+                expect(appointmentTime, "Expected the rescheduled appointment time to be selected before saving the reschedule.").toBeTruthy();
+                await appointmentsPage.clickRescheduleAppointmentButton();
+                await expect(appointmentsPage.appointmentRescheduledToast, "Expected the appointment rescheduled success toast to appear after confirming the new time.").toBeVisible();
+            })
+        })
+    })
+    //Negative Test Case
+    test("Verify that Validation Message appear when user try to submit empty form", async ({ page }) => {
+        const appointmentsPage = new AppointmentsPage(page);
+        await test.step("Navigate to the Appointment Registration Page", async () => {
+            await appointmentsPage.clickAppointmentsTab();
+            await appointmentsPage.clickBookAppointmentButton();
+            await appointmentsPage.expectToBeVisible(appointmentsPage.bookAppointmentHeading);
+        })
+        for (const clinic of testData.dashboard.clinics) {
+            await test.step(`Select clinic: ${clinic}`, async () => {
+                await appointmentsPage.clickClinicsDropdown();
+                await appointmentsPage.selectClinic(clinic);
+                await appointmentsPage.expectToBeVisible(appointmentsPage.clinicSwitchMessage)
+            });
+        }
+        await test.step("click Save and validate Message", async () => {
+            await appointmentsPage.selectDepartmentDropdown(testData.Appointments.bookAppointment.department);
+            await appointmentsPage.selectDoctorDropdown(testData.Appointments.bookAppointment.doctor)
+            const appointment = await appointmentsPage.selectNextAppointment();
+            const appointmentDate = appointment.date;
+            const appointmentTime = appointment.time;
+            console.log(`Appointment Date: ${appointmentDate}`);
+            console.log(`Appointment Time: ${appointmentTime}`);
+            await appointmentsPage.clickCreateAppointmentButton();
+            await expect(appointmentsPage.patientNameValidationMessage, "Expected the Validation Message to appear on patient Name Field.").toBeVisible();
+
+        })
+    })
     //positive test case
     test(" @doctor -Verify that the doctor is able to successfully book an appointment for a patient and reshedule it", async ({ page, createpatient }) => {
         const appointmentsPage = new AppointmentsPage(page);
@@ -237,8 +318,7 @@ test.describe("Appointments Page", () => {
                 testData.Appointments.bookAppointment.doctor
             );
             await appointmentsPage.selectDate(bookedDate);
-            const isAvailable =
-                await appointmentsPage.isTimeSlotAvailable(bookedTime);
+            const isAvailable = await appointmentsPage.isTimeSlotAvailable(bookedTime);
             expect(isAvailable, "Expected the same date and time to remain unavailable when rescheduling to prevent duplicates.").toBe(false);
         });
     });
@@ -276,21 +356,63 @@ test.describe("Appointments Page", () => {
             await appointmentsPage.clickcalenderViewButtonpage();
             await appointmentsPage.clickAppointmentByPatient(createpatient.firstName)
             await appointmentsPage.expectToBeVisible(appointmentsPage.startVisitSection)
-            await test.step("start visit flow", async () => {
-                await appointmentsPage.clickAppointmentsListTab();
-                await appointmentsPage.clickStartVisitButton();
-                await appointmentsPage.fillChiefComplaintField(testData.Appointments.startvisit.complaint);
-                await appointmentsPage.fillHistoryOfPresentIllnessField(testData.Appointments.startvisit.historyIllness);
-                await appointmentsPage.clickSaveButton();
-                await expect(appointmentsPage.successToast, "Expected the visit creation success toast to appear after saving the appointment details.").toBeVisible();
-                await appointmentsPage.fillDiagnosisField(testData.Appointments.startvisit.diagnosis);
-                await appointmentsPage.fillRecommendedTreatmentField(testData.Appointments.startvisit.recommendedTreatmentNotes);
-                //Inprogress
-            })
         })
+        await test.step("start visit flow and create bill", async () => {
+            await appointmentsPage.clickAppointmentsListTab();
+            await appointmentsPage.clickStartVisitButton();
+            await appointmentsPage.fillChiefComplaintField(testData.Appointments.startvisit.complaint);
+            await appointmentsPage.fillHistoryOfPresentIllnessField(testData.Appointments.startvisit.historyIllness);
+            await appointmentsPage.clickSaveButton();
+            await expect(appointmentsPage.successToast, "Expected the visit creation success toast to appear after saving the appointment details.").toBeVisible();
+            await appointmentsPage.clickPrescription();
+            await appointmentsPage.addFirstMedicine();
+            await appointmentsPage.searchMedicine(testData.Appointments.Prescription.searchMedicine);
+            await appointmentsPage.selectMedicine(testData.Appointments.Prescription.selectMedicine);
+            await appointmentsPage.clickAddMedicine();
+            await appointmentsPage.clickAddMedicine();
+            await appointmentsPage.searchMedicine(testData.Appointments.Prescription.searchSecondMedicine, 1);
+            await appointmentsPage.selectMedicine(testData.Appointments.Prescription.selectSecondMedicine);
+            await appointmentsPage.clickInvestigation1Blood();
+            await appointmentsPage.clickInvestigation2ImagingLab();
+            await appointmentsPage.clickLipidProfileBloodTest();
+            await appointmentsPage.clickPreviewButton();
+            await expect(appointmentsPage.printPreviewHeading, "Expected PrintPreview should be visible .").toBeVisible();
+            await appointmentsPage.clickCloseModalButton();
+            await appointmentsPage.clickfinalizePrescription();
+            await expect(appointmentsPage.savePrecriptionMessage, " Expected PrescriptionFinalised dialog should be Visible .").toBeVisible();
+            await appointmentsPage.clickCloseButton();
+            await expect(appointmentsPage.PrescriptionFinalisedSection, " Expected PrescriptionFinalised Toast to be visible .").toBeVisible();
+            await appointmentsPage.clickBackToVisitButton();
+            await appointmentsPage.fillDiagnosisField(testData.Appointments.startvisit.diagnosis);
+            await appointmentsPage.fillRecommendedTreatmentField(testData.Appointments.startvisit.recommendedTreatmentNotes);
+            await appointmentsPage.selectFirstTreatmentPerformed()
+            await appointmentsPage.clickSecondTreatmentPerformed();
+            await appointmentsPage.clickasWhenRequiredCheckBox();
+            await appointmentsPage.clickSaveButton();
+            await appointmentsPage.clickBillingButton();
+            await expect(appointmentsPage.createBillHeading, " Expected CreateBill Page should be Visible .").toBeVisible();
+            await appointmentsPage.clickAddButton();
+            const treatmentTotal = await appointmentsPage.getTreatmentTotal();
+            const amountPayable = await appointmentsPage.getAmountPayable();
+            expect(treatmentTotal, 'Sum of all treatment totals should match Amount Payable').toBe(amountPayable);
+            await appointmentsPage.selectRateCard(testData.Appointments["createbill(pricing)"].RateCard)
+            await appointmentsPage.selectBillDiscount(testData.Appointments["createbill(pricing)"].BillDiscount)
+            await appointmentsPage.selectDiscountReason(testData.Appointments["createbill(pricing)"].DiscountReason)
+            await appointmentsPage.enterBusinessName(testData.Appointments["createbill(pricing)"]["Employeename/ID"])
+            await appointmentsPage.clickApplyButton()
+            const additionalBillDiscount = await appointmentsPage.getAdditionalBillDiscount();
+            const netAmountPayable = await appointmentsPage.getNetAmountPayable();
+            expect(netAmountPayable, 'Net Amount Payable should equal Amount Payable minus Additional Bill Discount').toBe(amountPayable - additionalBillDiscount);
+            await appointmentsPage.clickfinalizeButton();
+            await appointmentsPage.clickfinalizePopUpButton();
+            expect(appointmentsPage.billFinalizeSection, "Expected Bill finalized. As Owner, you can still make changes. to be visible").toBeVisible();
+            //  await appointmentsPage.clickBilling();
+            //Inprogress
+        })
+
     })
     //Negative test cases
-    test("IVY_APT_47,Verify that validation message is appears for required fields on start visit", async ({ page, createpatient }) => {
+    test("IVY_APT_47,Verify that validation message appears for required fields on start visit", async ({ page, createpatient }) => {
         const appointmentsPage = new AppointmentsPage(page);
         await test.step("Navigate to the Appointment Registration Page", async () => {
             await appointmentsPage.clickAppointmentsTab();
@@ -323,12 +445,32 @@ test.describe("Appointments Page", () => {
             await appointmentsPage.clickcalenderViewButtonpage();
             await appointmentsPage.clickAppointmentByPatient(createpatient.firstName)
             await appointmentsPage.expectToBeVisible(appointmentsPage.startVisitSection)
-            await test.step("start visit flow", async () => {
-                await appointmentsPage.clickAppointmentsListTab();
-                await appointmentsPage.clickStartVisitButton();
-                await appointmentsPage.clickSaveButton();
-                await expect(appointmentsPage.chiefComplaintRequiredToast, "Expected the required chief complaint validation message to appear when the field is left empty.").toBeVisible();
-            })
+        })
+        await test.step("start visit flow", async () => {
+            await appointmentsPage.clickAppointmentsListTab();
+            await appointmentsPage.clickStartVisitButton();
+            await appointmentsPage.clickSaveButton();
+            await expect(appointmentsPage.chiefComplaintRequiredToast, "Expected the required chief complaint validation message to appear when the field is left empty.").toBeVisible();
+            await appointmentsPage.fillChiefComplaintField(testData.Appointments.startvisit.complaint);
+            await appointmentsPage.clickSaveButton();
+            await appointmentsPage.selectFirstTreatmentPerformed()
+            await appointmentsPage.clickSecondTreatmentPerformed();
+            await appointmentsPage.clickSaveButton();
+            await expect(appointmentsPage.followUpDateValidationMessage, "Expected the required Follow-up Date validation message to appear when the field is left empty.").toBeVisible();
+            await appointmentsPage.fillFollowUpDateField(testData.Appointments.startvisit.FollowUpDate)
+            await appointmentsPage.clickSaveButton();
+            await expect(appointmentsPage.followUpNoteValidationMessage, "Expected the required Follow-up Note validation message to appear when the field is left empty.").toBeVisible();
+            await appointmentsPage.fillfolloUpNoteField(testData.Appointments.startvisit.FollowUpNote)
+            await appointmentsPage.clickSaveButton();
+            await appointmentsPage.clickBillingButton();
+            await appointmentsPage.selectRateCard(testData.Appointments["createbill(pricing)"].RateCard)
+            await appointmentsPage.selectBillDiscount(testData.Appointments["createbill(pricing)"].BillDiscount)
+            await appointmentsPage.clickApplyButton()
+            await expect(appointmentsPage.discountReasonRequiredMessage, "").toHaveText("Please select a discount reason and enter the required detail before applying the bill discount")
+            await appointmentsPage.selectDiscountReason(testData.Appointments["createbill(pricing)"].DiscountReason)
+            await appointmentsPage.clickApplyButton()
+            await expect(appointmentsPage.discountReasonRequiredMessage, "").toHaveText("Please select a discount reason and enter the required detail before applying the bill discount")
+            //inprogress
         })
     })
 })
