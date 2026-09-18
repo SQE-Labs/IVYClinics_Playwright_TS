@@ -37,6 +37,7 @@ test.describe("Benefit Programs Page", () => {
         await test.step("Update the benefit program and validate the updated details", async () => {
             await benefitProgramPage.clickEditForProgram(programCode);
             await benefitProgramPage.expectToBeVisible(benefitProgramPage.editProgramHeading);
+            await expect(benefitProgramPage.programCodeInput, "Expected the Program Code field to remain disabled while editing the benefit program.").toBeDisabled();
             await benefitProgramPage.clickCancelButton();
             await expect(benefitProgramPage.editProgramHeading, "Expected the Edit Program modal to close after canceling the form.").not.toBeVisible();
             await benefitProgramPage.clickEditForProgram(programCode);
@@ -53,11 +54,37 @@ test.describe("Benefit Programs Page", () => {
         });
     })
 
-    test("IVY_BP_13, IVY_BP_16 Verify that a user cannot create a benefit program with a duplicate program code", async ({ page }) => {
+    test("IVY_BP_18 Verify that a user can create a benefit program with Inactive status", async ({ page }) => {
+        const benefitProgramPage = new BenefitProgramsPage(page);
+        const inactiveProgramCode = utils.generateProgramCode();
+        const inactiveProgramName = utils.generateProgramName();
+        await test.step("Navigate to Benefit Programs and verify the page", async () => {
+            await benefitProgramPage.clickBenefitProgramsTab();
+            await benefitProgramPage.expectToBeVisible(benefitProgramPage.benefitProgramsHeading);
+        });
+        await test.step("Create a benefit program and validate the program details", async () => {
+            await benefitProgramPage.clickAddProgramButton();
+            await benefitProgramPage.expectToBeVisible(benefitProgramPage.addProgramHeading);
+            await benefitProgramPage.fillProgramCode(inactiveProgramCode);
+            await benefitProgramPage.fillProgramName(inactiveProgramName);
+            await benefitProgramPage.selectInstrumentType(testData.benefitProgram.instrumentType);
+            await benefitProgramPage.selectStatus(testData.benefitProgram.inactiveStatus);
+            await benefitProgramPage.fillDescription(testData.benefitProgram.description);
+            await benefitProgramPage.clickCreateProgramButton();
+            await benefitProgramPage.expectToBeVisible(benefitProgramPage.successMessage);
+            const programRow = await benefitProgramPage.getProgramRow(inactiveProgramCode);
+            await expect(programRow, "Expected the created benefit program row to contain the generated program code.").toContainText(inactiveProgramCode);
+            await expect(programRow, "Expected the created benefit program row to contain the generated program name.").toContainText(inactiveProgramName);
+            await expect(programRow, "Expected the created benefit program to have Inactive status.").toContainText(testData.benefitProgram.inactiveStatus, { ignoreCase: true });
+        });
+    });
+
+    test("IVY_BP_14, IVY_BP_17 Verify that a user cannot create a benefit program with a duplicate program code", async ({ page }) => {
         const benefitProgramPage = new BenefitProgramsPage(page);
         const programCode = utils.generateProgramCode();
         const programName = utils.generateProgramName();
         const duplicateProgramName = utils.generateProgramName();
+        const invalidProgramCode = "A".repeat(51);
         await test.step("Create a benefit program with a unique program code", async () => {
             await benefitProgramPage.clickBenefitProgramsTab();
             await benefitProgramPage.expectToBeVisible(benefitProgramPage.benefitProgramsHeading);
@@ -84,9 +111,22 @@ test.describe("Benefit Programs Page", () => {
             await benefitProgramPage.clickCloseModalButton();
             await expect(benefitProgramPage.addProgramHeading, "Expected the duplicate code modal to close after the user dismisses it.").not.toBeVisible();
         });
+        await test.step("Attempt to create a benefit program with more than 50 characters in Program Code and validate the error", async () => {
+            await benefitProgramPage.clickAddProgramButton();
+            await benefitProgramPage.expectToBeVisible(benefitProgramPage.addProgramHeading);
+            await benefitProgramPage.fillProgramCode(invalidProgramCode);
+            await benefitProgramPage.fillProgramName(duplicateProgramName);
+            await benefitProgramPage.selectInstrumentType(testData.benefitProgram.instrumentType);
+            await benefitProgramPage.selectStatus(testData.benefitProgram.status);
+            await benefitProgramPage.fillDescription(testData.benefitProgram.description);
+            await benefitProgramPage.clickCreateProgramButton();
+            await benefitProgramPage.expectToBeVisible(benefitProgramPage.programCodeValidationMessage);
+            await expect(benefitProgramPage.programCodeValidationMessage, "Expected the Program Code validation message to indicate that the maximum allowed length is 50 characters.").toContainText("code: size must be between 0 and 50");
+            await benefitProgramPage.clickCloseModalButton();
+        });
     })
 
-    test("IVY_BP_14 Verify that a user can create benefit programs with the same program name", async ({ page }) => {
+    test("IVY_BP_15, IVY_BP_19 - Verify that a user can create benefit programs with the same program name", async ({ page }) => {
         const benefitProgramPage = new BenefitProgramsPage(page);
         const programCode = utils.generateProgramCode();
         const programName = utils.generateProgramName();
@@ -111,12 +151,25 @@ test.describe("Benefit Programs Page", () => {
             await benefitProgramPage.fillProgramName(programName);
             await benefitProgramPage.selectInstrumentType(testData.benefitProgram.instrumentType);
             await benefitProgramPage.selectStatus(testData.benefitProgram.status);
-            await benefitProgramPage.fillDescription(testData.benefitProgram.description);
             await benefitProgramPage.clickCreateProgramButton();
             await benefitProgramPage.expectToBeVisible(benefitProgramPage.successMessage);
             const newProgramRow = await benefitProgramPage.getProgramRow(newProgramCode);
             await expect(newProgramRow, "Expected the second program row to include the new program code even when the name is reused.").toContainText(newProgramCode);
             await expect(newProgramRow, "Expected the second program row to include the original program name even when the code is different.").toContainText(programName);
+        });
+    })
+
+    test("IVY_BP_RBAC_01, IVY_BP_RBAC_02, IVY_BP_RBAC_03 Verify that Receptionist can view Benefit Programs but cannot perform modification actions", { tag: "@receptionist" }, async ({ page }) => {
+        const benefitProgramPage = new BenefitProgramsPage(page);
+        await test.step("Navigate to Benefit Programs and verify existing records", async () => {
+            await benefitProgramPage.clickBenefitProgramsTab();
+            await benefitProgramPage.expectToBeVisible(benefitProgramPage.benefitProgramsHeading);
+            await expect(benefitProgramPage.benefitProgramsTable, "Expected the Benefit Programs data table to be visible to Receptionist.").toBeVisible();
+            const programRows = benefitProgramPage.benefitProgramsTable.locator("tbody tr");
+            await expect(programRows.first(), "Expected existing Benefit Program records to be displayed in the table for Receptionist.").toBeVisible();
+            await expect(benefitProgramPage.addProgramButton, "Expected the Add Program button to not be visible to Receptionist.").not.toBeVisible();
+            const editButton = await benefitProgramPage.getFirstProgramEditButton();
+            await expect(editButton, "Expected the Edit action to not be visible to Receptionist.").not.toBeVisible();
         });
     })
 });

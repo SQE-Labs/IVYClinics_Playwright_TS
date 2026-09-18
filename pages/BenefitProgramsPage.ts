@@ -20,6 +20,8 @@ export class BenefitProgramsPage extends BasePage {
     readonly duplicateProgramCodeMessage: Locator;
     readonly cancelButton: Locator;
     readonly closeModalButton: Locator;
+    readonly programCodeValidationMessage: Locator;
+    readonly benefitProgramsTable: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -41,6 +43,8 @@ export class BenefitProgramsPage extends BasePage {
         this.duplicateProgramCodeMessage = this.page.locator('[role="alert"]').filter({ hasText: 'already exists' });
         this.cancelButton = page.getByRole('button', { name: 'Cancel' });
         this.closeModalButton = page.getByRole('button', { name: 'Close modal' });
+        this.programCodeValidationMessage = this.page.locator('[role="alert"]').filter({ hasText: 'size must be between 0 and 50' });
+        this.benefitProgramsTable = page.getByRole('table')
     }
 
     // Methods
@@ -95,6 +99,15 @@ export class BenefitProgramsPage extends BasePage {
 
     async clickCloseModalButton() {
         await this.click(this.closeModalButton);
+    }
+
+    async getFirstProgramRow(): Promise<Locator> {
+        return this.benefitProgramsTable.locator('tbody tr').first();
+    }
+
+    async getFirstProgramEditButton(): Promise<Locator> {
+        const programRow = await this.getFirstProgramRow();
+        return programRow.getByRole('button', { name: 'Edit', exact: true });
     }
 
 }

@@ -6,11 +6,11 @@
       "localStorage": [
         {
           "name": "clinic_auth_token",
-          "value": "eyJhbGciOiJIUzUxMiJ9.eyJ0ZW5hbnRJZCI6ImEwZWViYzk5LTljMGItNGVmOC1iYjZkLTZiYjliZDM4MGExMSIsImVtYWlsIjoib3duZXJAZGVtby5jb20iLCJzdWIiOiJkMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDEiLCJpYXQiOjE3ODk2NDEwMzMsImV4cCI6MTc4OTcyNzQzM30.UDpYnOM7k67_JFfnYYCzZVwATEcMBIIbSwafw75WnqCggunJTxYY4faEMtTQk4yKUIsKAw2t1YGvXgWnMoGhhg"
+          "value": "eyJhbGciOiJIUzUxMiJ9.eyJ0ZW5hbnRJZCI6ImEwZWViYzk5LTljMGItNGVmOC1iYjZkLTZiYjliZDM4MGExMSIsImVtYWlsIjoicmVjZXB0aW9uaXN0QGRlbW8uY29tIiwic3ViIjoiZDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAzIiwiaWF0IjoxNzg5NzE2MTY2LCJleHAiOjE3ODk4MDI1NjZ9.V1rArIBhc5j5axvhvcd5O0C5i2nc4QYMib2qCG6xBgiQ1yttDVn40Mrw9Pq-vj7k4lErZ_WgOBrXNIzqacnKUQ"
         },
         {
           "name": "clinic_refresh_token",
-          "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDEiLCJpYXQiOjE3ODk2NDEwMzMsImV4cCI6MTc5MDI0NTgzM30.aEj263W_myNqjceokUmEBSPjY_C_VXILoqvJIYwUBrcfSNrZc0q9u_T9Fk25Kx2zzKxKlO0jmG6mGAuMqKadeg"
+          "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDMiLCJpYXQiOjE3ODk3MTYxNjYsImV4cCI6MTc5MDMyMDk2Nn0.WTEQcfA6b7hMWeUBpVfe481JBq4bkoezh1Tknpb7EGYC9WqzJHnwce8AZ4yY6iv1WsHsEci-pEW3jNaiVKYvtQ"
         },
         {
           "name": "clinic_selected_id",
