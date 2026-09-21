@@ -130,6 +130,7 @@
   "benefitProgram": {
     "instrumentType": "Wallet Coupon / Gift Card",
     "status": "Active",
+    "inactiveStatus": "Inactive",
     "description": "Automated Benefit Program",
     "updatedDescription": "Updated Automated Benefit Program"
   },
