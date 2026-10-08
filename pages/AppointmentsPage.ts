@@ -1,6 +1,7 @@
-import { Locator, Page, } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { BasePage } from "../base/BasePage"
 import { utils } from "../utils/Utility";
+import testData from "../test-data/test-data.json"
 
 export class AppointmentsPage extends BasePage {
 
@@ -69,21 +70,6 @@ export class AppointmentsPage extends BasePage {
     readonly backToVisitButton: Locator;
     readonly createBillHeading: Locator;
     readonly billingPopupButton: Locator;
-    readonly treatmentTotals: Locator;
-    readonly amountPayable: Locator;
-    readonly treatmentRows: Locator;
-    readonly additionalBillDiscount: Locator;
-    readonly applyButton: Locator;
-    readonly businessName: Locator;
-    readonly discountReason: Locator;
-    readonly billDiscount: Locator;
-    readonly rateCard: Locator;
-    readonly netAmountPayable: Locator;
-    readonly addButton: Locator;
-    readonly discountReasonRequiredMessage: Locator;
-    readonly finalizeButton : Locator;
-    readonly finalizePopUpButton : Locator;
-    readonly billFinalizeSection : Locator;
 
 
     constructor(page: Page) {
@@ -154,23 +140,7 @@ export class AppointmentsPage extends BasePage {
         this.backToVisitButton = this.page.getByRole('button', { name: 'Back to Visit' });
         this.billingPopupButton = this.page.getByRole('button', { name: 'Billing' });
         this.createBillHeading = this.page.getByRole('heading', { name: 'Create Bill' })
-        this.treatmentTotals = this.page.locator('span').filter({ hasText: /^₹[0-9,]+\.[0-9]{2}$/ });
-        this.treatmentRows = this.page.locator('div[class^="_serviceNameCell_"]').locator('../..');
-        this.amountPayable = this.page.getByText('Amount Payable', { exact: true }).locator('..').locator('span').nth(1);
-        this.additionalBillDiscount = this.page.getByText(/Additional Bill Discount/).locator('..').locator('span').nth(1);
-        this.rateCard = this.page.locator('#rate-card');
-        this.billDiscount = this.page.locator('#bill-discount');
-        this.discountReason = this.page.locator('#discount-reason');
-        this.businessName = this.page.getByText('Employee name / ID*')
-        this.applyButton = this.page.getByRole('button', { name: 'Apply', exact: true });
-        this.netAmountPayable = this.page.getByText('Net Amount Payable', { exact: true }).locator('..').locator('span').nth(1);
-        this.addButton = this.page.locator('button').filter({ hasText: '+' }).first();
-        this.discountReasonRequiredMessage = page.getByText(
-            "Please select a discount reason and enter the required detail before applying the bill discount."
-        );
-        this.finalizeButton = this.page.getByRole('button', { name: 'Finalize Invoice' })
-        this.finalizePopUpButton = this.page.getByText('Finalize', { exact: true })
-        this.billFinalizeSection = this.page.getByText('Bill finalized. As Owner, you can still make changes.', { exact: true })
+
     }
 
     async clickAppointmentsTab() {
@@ -253,11 +223,28 @@ export class AppointmentsPage extends BasePage {
     async clickcalenderViewButtonpage() {
         await this.click(this.calenderViewButtonpage)
     }
-    async selectAllDoctor(doctorName: string): Promise<void> {
+   async verifyAllDoctorDropdownByRole(role: string) {
+
+    if (role === "doctor") {
+
+        await expect(
+            this.allDoctorDropdown,
+            "Expected All Doctor dropdown to be disabled for Doctor."
+        ).toBeDisabled();
+
+    } else if (role === "receptionist" || role === "owner") {
+
         await this.allDoctorDropdown.selectOption({
-            label: doctorName
+            label: testData.Appointments.bookAppointment.AllDoctor
         });
+
     }
+}
+    // async selectAllDoctor(doctorName: string): Promise<void> {
+    //     await this.allDoctorDropdown.selectOption({
+    //         label: doctorName
+    //     });
+    // }
     async isTimeSlotDisabled(timeSlot: string): Promise<boolean> {
         const options = this.startTimeDropdown.locator('option');
         const count = await options.count();
@@ -403,77 +390,18 @@ export class AppointmentsPage extends BasePage {
     async clickBillingButton() {
         await this.click(this.billingButton);
     }
-    async getTreatmentTotal(): Promise<number> {
-        const count = await this.treatmentRows.count();
-
-        let treatmentTotal = 0;
-
-        for (let i = 0; i < count; i++) {
-            const amounts = this.treatmentRows
-                .nth(i)
-                .locator('text=/₹[0-9,]+\.[0-9]{2}/');
-
-            const value = await amounts.last().innerText();
-
-            treatmentTotal += Number(
-                value.replace(/[₹,\s]/g, '')
-            );
+    async verifyStartVisitByRole(role: string) {
+        if (role === "doctor") {
+            await expect(
+                this.startVisitSection,
+                "Expected Start Visit to be visible for Doctor."
+            ).toBeVisible();
+        } else if (role === "receptionist") {
+            await expect(
+                this.startVisitSection,
+                "Expected Start Visit not to be visible for Receptionist."
+            ).not.toBeVisible();
         }
-
-        return treatmentTotal;
-    }
-    async getAmountPayable(): Promise<number> {
-        const amountPayableText = await this.amountPayable.innerText();
-
-        return Number(
-            amountPayableText.replace(/[₹,\s]/g, '')
-        );
-    }
-    async getAdditionalBillDiscount(): Promise<number> {
-        if (await this.page.getByText(/Additional Bill Discount/).count() === 0) {
-            return 0;
-        }
-
-        const value = await this.additionalBillDiscount.innerText();
-
-        return Number(
-            value.replace(/[₹,\s−-]/g, '')
-        );
-    }
-    async selectRateCard(rateCard: string) {
-        await this.rateCard.selectOption({ label: rateCard });
-    }
-
-    async selectBillDiscount(billDiscount: string) {
-        await this.billDiscount.selectOption({ label: billDiscount });
-    }
-
-    async selectDiscountReason(discountReason: string) {
-        await this.discountReason.selectOption({ label: discountReason });
-    }
-
-    async enterBusinessName(businessName: string) {
-        await this.businessName.fill(businessName);
-    }
-
-    async clickApplyButton() {
-        await this.applyButton.click();
-    }
-    async getNetAmountPayable(): Promise<number> {
-        const netAmountPayableText = await this.netAmountPayable.innerText();
-
-        return Number(
-            netAmountPayableText.replace(/[₹,\s]/g, '')
-        );
-    }
-    async clickAddButton() {
-        await this.addButton.click();
-    }
-    async clickfinalizeButton(){
-        await this.click(this.finalizeButton)
-    }
-    async clickfinalizePopUpButton(){
-        await this.click(this.finalizePopUpButton)
     }
 
 }

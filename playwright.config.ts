@@ -33,6 +33,14 @@ export default defineConfig({
 
     navigationTimeout: 30000,
 
+    locale: 'en-IN',
+
+    timezoneId: 'Asia/Kolkata',
+
+    geolocation: { latitude: 28.6139, longitude: 77.2090 },
+
+    permissions: ['geolocation'],
+
 
     // launchOptions: {
     //   slowMo: 1500,
@@ -40,7 +48,7 @@ export default defineConfig({
   },
 
   projects: [
-     {
+    {
       name: "setup",
       testMatch: /.*\.setup\.ts/,
     },
@@ -63,6 +71,7 @@ export default defineConfig({
         storageState: "auth/user.json",
       },
       dependencies: ["setup"],
-    }
+    },
+    
   ],
 });

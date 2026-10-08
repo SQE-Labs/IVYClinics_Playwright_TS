@@ -117,14 +117,27 @@
       "selectMedicine": "Adephil Moisturizing Cream (",
       "searchSecondMedicine": "para",
       "selectSecondMedicine": "Calpol 250mg/5ml (Paracetamol"
-
     },
     "createbill(pricing)": {
       "RateCard": "XYZ",
       "BillDiscount": "FLat 500 (₹800.00)",
       "DiscountReason": "Group company employee",
       "Employeename/ID": "123ID"
+    },
+    "ReceivePayment": {
+      "Method": "Cash",
+      "Amount": "5000",
+      "Reference": "Group",
+      "Employeename/ID": "123ID",
+      "Amount2": "100000000"
+    }
+  },
+   "createBill": {
+    "firstTreatment": "Chemical Peel – Salicylic Acid",
 
+    "ReceivePayment(outstandingdue)": {
+      "Method": "Card",
+      "ReceiveAmount": "10000"
     }
   },
   "benefitProgram": {
@@ -138,9 +151,11 @@
     "lotCode": "LOT-A-2026",
     "lotName": "Diwali 2026 Wallets",
     "walletValue": "5000",
-    "expiryDate": "2026-09-30",
+    "expiryDate": "2029-09-30",
+    "expiryDate2": "2020-09-30",
     "discountTaxMode": "Before Tax (default)",
     "codeGenerationMode": "System Auto-Generated",
     "notes": "Automation test"
-}
+  }
+
 }

@@ -7,7 +7,7 @@ test.describe("Benefit Programs Page", () => {
     test.beforeEach(async ({ page }) => {
         await page.goto("/benefit-programs");
     })
-    test("IVY_BP_01, IVY_BP_02, IVY_BP_03, IVY_BP_04, IVY_BP_05, IVY_BP_06, IVY_BP_07, IVY_BP_08, IVY_BP_09, IVY_BP_10, IVY_BP_11, IVY_BP_12, IVY_BP_15 Verify that a user can create and update a benefit program and validate details", async ({ page }) => {
+    test("@receptionist,IVY_BP_01, IVY_BP_02, IVY_BP_03, IVY_BP_04, IVY_BP_05, IVY_BP_06, IVY_BP_07, IVY_BP_08, IVY_BP_09, IVY_BP_10, IVY_BP_11, IVY_BP_12, IVY_BP_15 Verify that a user can create and update a benefit program and validate details", async ({ page }) => {
         const benefitProgramPage = new BenefitProgramsPage(page);
         const programCode = utils.generateProgramCode();
         const programName = utils.generateProgramName();
@@ -53,7 +53,7 @@ test.describe("Benefit Programs Page", () => {
         });
     })
 
-    test("IVY_BP_13, IVY_BP_16 Verify that a user cannot create a benefit program with a duplicate program code", async ({ page }) => {
+    test("@receptionist,IVY_BP_13, IVY_BP_16 Verify that a user cannot create a benefit program with a duplicate program code", async ({ page }) => {
         const benefitProgramPage = new BenefitProgramsPage(page);
         const programCode = utils.generateProgramCode();
         const programName = utils.generateProgramName();
@@ -86,7 +86,7 @@ test.describe("Benefit Programs Page", () => {
         });
     })
 
-    test("IVY_BP_14 Verify that a user can create benefit programs with the same program name", async ({ page }) => {
+    test("IVY_BP_14,@receptionist Verify that a user can create benefit programs with the same program name", async ({ page }) => {
         const benefitProgramPage = new BenefitProgramsPage(page);
         const programCode = utils.generateProgramCode();
         const programName = utils.generateProgramName();

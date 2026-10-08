@@ -17,6 +17,7 @@ $env:ENV="uat"
 npm run test:doctor -- --project=chromium --workers=1
 //receptionist
 $env:ENV="uat"
+npm run test:receptionist -- --project=chromium --workers=1
 
 
 You can also make it even cleaner:

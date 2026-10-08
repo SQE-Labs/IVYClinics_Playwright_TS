@@ -1,4 +1,4 @@
-import { test as setup, expect } from "@playwright/test";
+import { test as setup,} from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { ConfigManager } from "../utils/ConfigManager";
 
